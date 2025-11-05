@@ -29,17 +29,13 @@ public class ClienteController {
      @RequestMapping(value = "/cadastrarCliente", method = RequestMethod.POST)
 
      public String form(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
-         ModelAndView mv = new ModelAndView("cadastro/formCliente");
-
          if (result.hasErrors()) {
              attributes.addFlashAttribute("mensagem", "Verifique os campos...");
-
              return "redirect:/cadastrarCliente";
          }
 
+         vr.save(cliente);
+         attributes.addFlashAttribute("mensagem", "Cliente cadastrado com sucesso!");
+         return "redirect:/cadastrarCliente";
      }
-    
-     vr.save(cliente);
-     attributes.addFlashAttribute("mensagem", "Cliente cadastrado com sucesso!");
-     return "redirect:/cadastrarCliente";
 }
