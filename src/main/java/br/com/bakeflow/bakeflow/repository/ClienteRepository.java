@@ -5,12 +5,25 @@ import br.com.bakeflow.bakeflow.model.*;
 import java.util.List;
 
 public interface ClienteRepository extends CrudRepository<Cliente, Long> {
-
+    
+    // Buscar por ID
     Cliente findByID_Cliente(long ID_Cliente);
 
-    List<Cliente> findBytelefone(String telefone);
+    // Buscar por telefone
+    List<Cliente> findByTelefone(String telefone);
 
-    List<Cliente> findBynome(String nome);
+    // Buscar por nome
+    List<Cliente> findByNome(String nome);
     
-    List<Cliente> findByendereco(String endereco);
+    // Buscar por endereço
+    List<Cliente> findByEndereco(String endereco);
+    
+    // Buscar por nome contendo (case insensitive)
+    List<Cliente> findByNomeContainingIgnoreCase(String nome);
+    
+    // Buscar por endereço contendo
+    List<Cliente> findByEnderecoContainingIgnoreCase(String endereco);
+    
+    // Buscar clientes ordenados por nome
+    List<Cliente> findAllByOrderByNomeAsc();
 }
