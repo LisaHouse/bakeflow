@@ -19,12 +19,12 @@ public class Estoque {
     // Cria PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Estoque")
+    @Column(name = "id_estoque")
     private Long idEstoque;
     
     // Cria FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_Produto", nullable = false, foreignKey = @ForeignKey(name = "fk_estoque_produto"))
+    @JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "fk_estoque_produto"))
     private Produto produto;
     
     @Column(name = "quantidade", nullable = false)

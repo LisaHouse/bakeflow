@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public interface PedidoRepository extends CrudRepository<Pedido, Long> {
 
-    Pedido findByID_Pedido(Long ID_Pedido);
+    Pedido findByidPedido(Long idPedido);
     
  
     List<Pedido> findByCliente(Cliente cliente);
@@ -21,7 +21,7 @@ public interface PedidoRepository extends CrudRepository<Pedido, Long> {
     List<Pedido> findByDataAtualizacaoBetween(Date inicio, Date fim);
     
   
-    List<Pedido> findByValor_totalGreaterThan(BigDecimal valor);
+    List<Pedido> findByvalorTotalGreaterThan(BigDecimal valorTotal);
     
    
     List<Pedido> findByClienteAndStatus(Cliente cliente, String status);

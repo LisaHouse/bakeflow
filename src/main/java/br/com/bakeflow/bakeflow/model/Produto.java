@@ -22,7 +22,7 @@ public class Produto implements Serializable {
     // Cria PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Produto")
+    @Column(name = "id_produto")
     private Long idProduto;
 
     @Column(name = "nome", nullable = false, length = 100)

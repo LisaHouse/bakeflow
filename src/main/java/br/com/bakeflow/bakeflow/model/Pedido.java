@@ -27,12 +27,12 @@ public class Pedido implements Serializable {
     // gera PK
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_Pedido")
-    private long ID_Pedido;
+    @Column(name = "id_pedido")
+    private long idPedido;
 
     // Cria FK para Cliente
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_Cliente", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
+    @JoinColumn(name = "id_cliente", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
     
 
@@ -42,10 +42,10 @@ public class Pedido implements Serializable {
 
     @Column(name = "status", nullable = false, length = 100)
     @NotEmpty
-    private String Status;
+    private String status;
 
     @Column(name = "valor_total", precision = 10, scale = 2)
-    private BigDecimal valor_total;
+    private BigDecimal valorTotal;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Item_Pedido> itensPedido;
@@ -57,5 +57,46 @@ public class Pedido implements Serializable {
 
     public void setItensPedido(List<Item_Pedido> itensPedido) {
         this.itensPedido = itensPedido;
+    }
+
+
+    public long getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(long ID_Pedido) {
+        this.idPedido = ID_Pedido;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Date getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(Date dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valor_total) {
+        this.valorTotal = valor_total;
     }
 }

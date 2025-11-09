@@ -2,82 +2,78 @@ package br.com.bakeflow.bakeflow.model;
 
 import java.io.Serializable;
 import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
-
-
 @Entity
 @Table(name = "cliente")
-public class Cliente implements Serializable{
+public class Cliente implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-     // gera PK
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_Cliente")
-    private long ID_Cliente;
+    @Column(name = "id_cliente")
+    private Long idCliente;
 
     @Column(name = "telefone", nullable = false, length = 100)
     @NotEmpty
-    private String Telefone;
+    private String telefone;
 
     @Column(name = "nome", nullable = false, length = 100)
     @NotEmpty
-    private String Nome;
-    
+    private String nome;
+
     @Column(name = "endereco", nullable = false, length = 100)
     @NotEmpty
-    private String Endereco;
+    private String endereco;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidos;
 
-     // get set Cliente
-    public long getID_Cliente() {
-        return ID_Cliente;
+
+
+    public Long getIdCliente() {
+        return idCliente;
     }
 
-    public void setID_Cliente(long iD_Cliente) {
-        ID_Cliente = iD_Cliente;
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
     }
 
-     // get set Telefone
     public String getTelefone() {
-        return Telefone;
+        return telefone;
     }
 
     public void setTelefone(String telefone) {
-        Telefone = telefone;
+        this.telefone = telefone;
     }
 
-     // get set Nome
     public String getNome() {
-        return Nome;
+        return nome;
     }
 
     public void setNome(String nome) {
-        Nome = nome;
+        this.nome = nome;
     }
 
-    // get set Endereço
     public String getEndereco() {
-        return Endereco;
+        return endereco;
     }
 
     public void setEndereco(String endereco) {
-        Endereco = endereco;
+        this.endereco = endereco;
     }
 
-    // Getters e Setters para pedidos
     public List<Pedido> getPedidos() {
         return pedidos;
     }

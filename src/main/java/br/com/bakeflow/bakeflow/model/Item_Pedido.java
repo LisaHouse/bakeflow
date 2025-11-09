@@ -22,17 +22,17 @@ public class Item_Pedido implements Serializable {
     // gera PK
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_ItemPedido")
-    private long ID_ItemPedido;
+    @Column(name = "id_item_pedido")
+    private long idItemPedido;
 
     // Cria FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_Pedido", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_pedido"))
+    @JoinColumn(name = "id_pedido", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_pedido"))
     private Pedido pedido;
     
     // Cria FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_Produto", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_produto"))
+    @JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_produto"))
     private Produto produto;
 
     @Column(name = "quantidade", nullable = false)
@@ -41,4 +41,43 @@ public class Item_Pedido implements Serializable {
     @Column(name = "valor", precision = 10, scale = 2)
     private BigDecimal valor;
 
+    public long getIdItemPedido() {
+        return idItemPedido;
+    }
+
+    public void setIdItemPedido(long ID_ItemPedido) {
+        this.idItemPedido = ID_ItemPedido;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
 }

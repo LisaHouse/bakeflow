@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public interface Item_PedidoRepository extends CrudRepository<Item_Pedido, Long> {
     
     
-    Item_Pedido findByID_ItemPedido(Long ID_ItemPedido);
+    Item_Pedido findByidItemPedido(Long ID_ItemPedido);
     
 
     List<Item_Pedido> findByPedido(Pedido pedido);

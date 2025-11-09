@@ -25,3 +25,5 @@ public interface EstoqueRepository extends CrudRepository<Estoque, Long> {
     
     List<Estoque> findByProdutoOrderByQuantidadeDesc(Produto produto);
 }
+
+
