@@ -1,5 +1,6 @@
 package br.com.bakeflow.bakeflow.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ public class ClienteController {
     }
 
      @RequestMapping(value = "/cadastrarCliente", method = RequestMethod.POST)
+     @Operation(summary = "endpoint para cadastro de cliente")
 
      public String form(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
          if (result.hasErrors()) {
