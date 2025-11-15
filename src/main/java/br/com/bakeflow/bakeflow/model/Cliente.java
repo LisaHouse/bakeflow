@@ -37,8 +37,7 @@ public class Cliente implements Serializable {
     @NotEmpty
     private String endereco;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Pedido> pedidos;
+
 
 
 
@@ -74,11 +73,5 @@ public class Cliente implements Serializable {
         this.endereco = endereco;
     }
 
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
 
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
 }

@@ -1,5 +1,6 @@
 package br.com.bakeflow.bakeflow.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ public class Item_PedidoController {
     }
 
     @RequestMapping(value = "/cadastrarItemPedido", method = RequestMethod.POST)
+    @Operation(summary = "endpoint para cadastro de item_pedido")
     public String form(@Valid Item_Pedido itemPedido, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute("mensagem", "Verifique os campos...");
