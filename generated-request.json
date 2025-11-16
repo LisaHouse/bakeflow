@@ -1,0 +1,97 @@
+{
+  "collection" : {
+    "info" : {
+      "name" : "Generated Requests",
+      "schema" : "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item" : [ {
+      "name" : "cadastrarEstoque",
+      "request" : {
+        "method" : "POST",
+        "header" : [ ],
+        "url" : {
+          "raw" : "http://localhost:8080/api/cadastrarEstoque",
+          "host" : [ "http://localhost:8080" ],
+          "path" : [ "/api", "cadastrarEstoque" ],
+          "query" : [ {
+            "key" : "estoque",
+            "value" : ""
+          }, {
+            "key" : "result",
+            "value" : ""
+          }, {
+            "key" : "attributes",
+            "value" : ""
+          } ]
+        }
+      },
+      "response" : [ ]
+    }, {
+      "name" : "cadastrarCliente",
+      "request" : {
+        "method" : "POST",
+        "header" : [ ],
+        "url" : {
+          "raw" : "http://localhost:8080/api/cadastrarCliente",
+          "host" : [ "http://localhost:8080" ],
+          "path" : [ "/api", "cadastrarCliente" ],
+          "query" : [ {
+            "key" : "cliente",
+            "value" : ""
+          }, {
+            "key" : "result",
+            "value" : ""
+          }, {
+            "key" : "attributes",
+            "value" : ""
+          } ]
+        }
+      },
+      "response" : [ ]
+    }, {
+      "name" : "cadastrarCliente",
+      "request" : {
+        "method" : "POST",
+        "header" : [ ],
+        "url" : {
+          "raw" : "http://localhost:8080/api/cadastrarCliente",
+          "host" : [ "http://localhost:8080" ],
+          "path" : [ "/api", "cadastrarCliente" ],
+          "query" : [ {
+            "key" : "cliente",
+            "value" : ""
+          }, {
+            "key" : "result",
+            "value" : ""
+          }, {
+            "key" : "attributes",
+            "value" : ""
+          } ]
+        }
+      },
+      "response" : [ ]
+    }, {
+      "name" : "cadastrarItemPedido",
+      "request" : {
+        "method" : "POST",
+        "header" : [ ],
+        "url" : {
+          "raw" : "http://localhost:8080/api/cadastrarItemPedido",
+          "host" : [ "http://localhost:8080" ],
+          "path" : [ "/api", "cadastrarItemPedido" ],
+          "query" : [ {
+            "key" : "itemPedido",
+            "value" : ""
+          }, {
+            "key" : "result",
+            "value" : ""
+          }, {
+            "key" : "attributes",
+            "value" : ""
+          } ]
+        }
+      },
+      "response" : [ ]
+    } ]
+  }
+}
