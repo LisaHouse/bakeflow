@@ -19,25 +19,25 @@ public class ClienteController {
     @Autowired
     public ClienteRepository vr;
 
-    @GetMapping("/cadastrarCliente")
+    @GetMapping("/cadastroCliente")
 
     public ModelAndView form() {
-        ModelAndView mv = new ModelAndView("cadastro/formCliente");
+        ModelAndView mv = new ModelAndView("cadastroCliente");
         mv.addObject("cliente", new Cliente());
         return mv;
     }
 
-     @RequestMapping(value = "/cadastrarCliente", method = RequestMethod.POST)
+     @RequestMapping(value = "/cadastroCliente", method = RequestMethod.POST)
      @Operation(summary = "endpoint para cadastro de cliente")
 
      public String form(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
          if (result.hasErrors()) {
              attributes.addFlashAttribute("mensagem", "Verifique os campos...");
-             return "redirect:/cadastrarCliente";
+             return "redirect:/cadastroCliente";
          }
 
          vr.save(cliente);
          attributes.addFlashAttribute("mensagem", "Cliente cadastrado com sucesso!");
-         return "redirect:/cadastrarCliente";
+         return "redirect:/cadastroCliente";
      }
 }
