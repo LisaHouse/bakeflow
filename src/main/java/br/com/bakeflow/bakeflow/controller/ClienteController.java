@@ -1,9 +1,8 @@
 package br.com.bakeflow.bakeflow.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
+import br.com.bakeflow.bakeflow.service.ClienteService;
 import jakarta.validation.Valid;
 import br.com.bakeflow.bakeflow.model.Cliente;
-import br.com.bakeflow.bakeflow.repository.ClienteRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cadastroCliente")
 public class ClienteController {
 
-    private final ClienteRepository clienteRepository;
+    private final ClienteService service;
 
-    public ClienteController(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
+    public ClienteController(ClienteService service) {
+        this.service = service;
     }
 
     @GetMapping
@@ -31,18 +30,16 @@ public class ClienteController {
     }
 
     @PostMapping
-    @Operation(summary = "endpoint para cadastro de cliente")
-    public String submitForm(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
+    public String submitForm(@Valid Cliente cliente, BindingResult result,
+                             RedirectAttributes attributes) {
+
         if (result.hasErrors()) {
-            // Repassa o objeto cliente e os erros usando flash attributes (se for necessário redirecionar)
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.cliente", result);
             attributes.addFlashAttribute("cliente", cliente);
             return "redirect:/cadastroCliente";
-            // alternativa sem redirect (melhor para mostrar erros imediatamente):
-            // return "cadastroCliente";
         }
 
-        clienteRepository.save(cliente);
+        service.save(cliente);
         attributes.addFlashAttribute("mensagem", "Cliente cadastrado com sucesso!");
         return "redirect:/cadastroCliente";
     }

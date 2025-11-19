@@ -1,9 +1,7 @@
 package br.com.bakeflow.bakeflow.controller;
 
-import br.com.bakeflow.bakeflow.model.Estoque;
 import br.com.bakeflow.bakeflow.model.Item_Pedido;
-import br.com.bakeflow.bakeflow.repository.EstoqueRepository;
-import br.com.bakeflow.bakeflow.repository.Item_PedidoRepository;
+import br.com.bakeflow.bakeflow.service.Item_PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -18,11 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cadastroPedido")
 public class Item_PedidoController {
 
-    private final Item_PedidoRepository item_PedidoRepository;
+    private final Item_PedidoService service;
 
-    public Item_PedidoController(Item_PedidoRepository item_PedidoRepository) {
-        this.item_PedidoRepository = item_PedidoRepository;
+    public Item_PedidoController(Item_PedidoService service) {
+        this.service = service;
     }
+
 
     @GetMapping
     public String showForm(Model model) {
@@ -41,7 +40,7 @@ public class Item_PedidoController {
             return "redirect:/cadastroItem_Pedido";
         }
 
-        item_PedidoRepository.save(item_Pedido);
+        service.save(item_Pedido);
         attributes.addFlashAttribute("mensagem", "estoque cadastrado com sucesso!");
         return "redirect:/cadastroEstoque";
     }

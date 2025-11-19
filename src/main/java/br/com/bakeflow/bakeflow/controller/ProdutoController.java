@@ -2,8 +2,7 @@ package br.com.bakeflow.bakeflow.controller;
 
 import br.com.bakeflow.bakeflow.model.Estoque;
 import br.com.bakeflow.bakeflow.model.Produto;
-import br.com.bakeflow.bakeflow.repository.EstoqueRepository;
-import br.com.bakeflow.bakeflow.repository.ProdutoRepository;
+import br.com.bakeflow.bakeflow.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -18,10 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cadastroproduto")
 public class ProdutoController {
 
-    private final ProdutoRepository produtoRepository;
+    private final ProdutoService service;
 
-    public ProdutoController(ProdutoRepository produtoRepository) {
-        this.produtoRepository = produtoRepository;
+    public ProdutoController(ProdutoService service) {
+        this.service = service;
     }
 
     @GetMapping
@@ -41,7 +40,7 @@ public class ProdutoController {
             return "redirect:/cadastroProduto";
         }
 
-        produtoRepository.save(produto);
+        service.save(produto);
         attributes.addFlashAttribute("mensagem", "produto cadastrado com sucesso!");
         return "redirect:/cadastroProduto";
     }
