@@ -92,6 +92,28 @@
         }
       },
       "response" : [ ]
+    }, {
+      "name" : "cadastroEndereco",
+      "request" : {
+        "method" : "POST",
+        "header" : [ ],
+        "url" : {
+          "raw" : "http://localhost:8080/api/cadastroEndereco",
+          "host" : [ "http://localhost:8080" ],
+          "path" : [ "/api", "cadastroEndereco" ],
+          "query" : [ {
+            "key" : "endereco",
+            "value" : ""
+          }, {
+            "key" : "result",
+            "value" : ""
+          }, {
+            "key" : "attributes",
+            "value" : ""
+          } ]
+        }
+      },
+      "response" : [ ]
     } ]
   }
 }
