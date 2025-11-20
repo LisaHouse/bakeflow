@@ -11,8 +11,8 @@
 <header class="menu-superior">
     <nav>
         <ul>
-            <li><a href="#">Início</a></li>
-            <li><a href="#">Cadastros</a></li>
+            <li><a href="/">Início</a></li>
+            <li><a href="/cadastroCliente">Clientes</a></li>
             <li><a href="#">Relatórios</a></li>
         </ul>
     </nav>
@@ -22,54 +22,33 @@
 
     <h1 class="titulo">CADASTRO DE CLIENTE</h1>
 
-    <div class="card-principal">
+    <div class="principal">
 
+        <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post">
 
-        <form class="formulario" th:action="@{/produtos/salvar}" method="post">
-
-            <div class="grupo tipo-produto">
-                <label class="label">TIPO DE PRODUTO</label>
-
-                <label class="radio-container">
-                    <input type="radio" name="tipo" value="MATERIA_PRIMA">
-                    <span class="radio-custom"></span>
-                    MATERIA PRIMA
-                </label>
-
-                <label class="radio-container">
-                    <input type="radio" name="tipo" value="MERCADORIA">
-                    <span class="radio-custom"></span>
-                    MERCADORIA
-                </label>
+            <!-- CAMPO NOME -->
+            <div class="grupo">
+                <label>Nome Completo: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{nome}" placeholder="Digite o nome do cliente">
+                <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
             <div class="grupo">
-                <label>Identificador de Produto: <span class="obrigatorio">*</span></label>
-                <input type="text" name="identificadorProduto" placeholder="Coloque o Identificador do Produto">
+                <label>Telefone: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{telefone}" placeholder="Digite o telefone">
+                <small th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="erro"></small>
             </div>
 
             <div class="grupo">
-                <label>Identificador de Estoque: <span class="obrigatorio">*</span></label>
-                <input type="text" name="identificadorEstoque" placeholder="Digite o Identificador de estoque">
+                <label>Endereço: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{endereco}" placeholder="Digite o endereço completo">
+                <small th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}" class="erro"></small>
             </div>
 
-            <div class="grupo">
-                <label>Valor: <span class="obrigatorio">*</span></label>
-                <div class="valor-container">
-                    <span class="moeda">$</span>
-                    <input type="number" step="0.01" name="valor" placeholder="Digite o valor do produto">
-                </div>
-            </div>
-
-            <div class="grupo">
-                <label>Nome do Fornecedor: <span class="obrigatorio">*</span></label>
-                <input type="text" name="fornecedor" placeholder="Digite o nome da empresa">
-            </div>
-
-            <button type="submit" class="btn-cadastrar">CADASTRAR</button>
+            <button type="submit" class="btn-cadastrar">
+                <span th:text="${cliente.idCliente != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
+            </button>
         </form>
-
-
 
     </div>
 </section>

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/cadastroproduto")
+@RequestMapping("/cadastroProduto")
 public class ProdutoController {
 
     private final ProdutoService service;
@@ -26,7 +26,7 @@ public class ProdutoController {
     @GetMapping
     public String showForm(Model model) {
         if (!model.containsAttribute("produto")) {
-            model.addAttribute("produto", new Estoque());
+            model.addAttribute("produto", new Produto());
         }
         return "cadastroProduto";
     }

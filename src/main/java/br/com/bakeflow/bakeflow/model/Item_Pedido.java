@@ -25,12 +25,12 @@ public class Item_Pedido implements Serializable {
     @Column(name = "id_item_pedido")
     private long idItemPedido;
 
-    // Cria FK
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pedido", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_pedido"))
+
+    @ManyToOne
+    @JoinColumn(name = "id_pedido")
     private Pedido pedido;
     
-    // Cria FK
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_produto"))
     private Produto produto;

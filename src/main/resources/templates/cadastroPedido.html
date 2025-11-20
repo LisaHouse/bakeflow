@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -7,12 +8,12 @@
     <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
 </head>
 <body>
-<!--
+
 <header class="menu-superior">
     <nav>
         <ul>
             <li><a href="/">Início</a></li>
-            <li><a href="/cadastroProduto">Produto</a></li>
+            <li><a href="/cadastroPedido">Produto</a></li>
             <li><a href="#">Relatórios</a></li>
         </ul>
     </nav>
@@ -24,28 +25,31 @@
 
     <div class="principal">
 
-        <form th:action="@{/cadastroProduto}" th:object="${produto}" method="post">
+        <form th:action="@{/cadastroPedido}" th:object="${pedido}" method="post">
 
 
             <div class="grupo">
                 <label>Nome do Produto: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto">
-                <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
+                <input type="text" th:field="*{dataAtualizacao}" placeholder="Digite a data do pedido">
+                <small th:if="${#fields.hasErrors('dataAtualizacao')}" th:errors="*{dataAtualizacao}" class="erro"></small>
             </div>
 
             <div class="grupo">
-                <label>Preco: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{preco}" placeholder="Digite o preco">
-                <small th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}" class="erro"></small>
+                <label>Status: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{status}" placeholder="Digite o preco">
+                <small th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="erro"></small>
             </div>
 
             <button type="submit" class="btn-cadastrar">
-                <span th:text="${produto.idProduto != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
+                <span th:text="${pedido.idPedido != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
         </form>
 
     </div>
 </section>
--->
+
+
 </body>
 </html>
+
+

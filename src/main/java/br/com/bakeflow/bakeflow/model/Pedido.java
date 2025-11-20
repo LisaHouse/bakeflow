@@ -1,6 +1,7 @@
 package br.com.bakeflow.bakeflow.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import jakarta.persistence.Entity;
@@ -24,13 +25,12 @@ import jakarta.validation.constraints.NotEmpty;
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // gera PK
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_pedido")
     private long idPedido;
 
-    // Cria FK para Cliente
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
@@ -47,16 +47,16 @@ public class Pedido implements Serializable {
     @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Item_Pedido> itensPedido;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item_Pedido> itens = new ArrayList<>();
 
     // Getters e Setters para itensPedido
-    public List<Item_Pedido> getItensPedido() {
-        return itensPedido;
+    public List<Item_Pedido> getItens() {
+        return itens;
     }
 
     public void setItensPedido(List<Item_Pedido> itensPedido) {
-        this.itensPedido = itensPedido;
+        this.itens = itens;
     }
 
 
