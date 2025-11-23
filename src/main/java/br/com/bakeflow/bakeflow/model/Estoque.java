@@ -30,7 +30,7 @@ public class Estoque {
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
 
-    // Construtores
+
     public Estoque() {}
 
     public Estoque(Produto produto, Integer quantidade) {

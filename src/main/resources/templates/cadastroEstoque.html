@@ -12,7 +12,7 @@
     <nav>
         <ul>
             <li><a href="/">Início</a></li>
-            <li><a href="/cadastroProduto">Produtó</a></li>
+            <li><a href="/cadastroEstoque">Clientes</a></li>
             <li><a href="#">Relatórios</a></li>
         </ul>
     </nav>
@@ -20,28 +20,28 @@
 
 <section class="container">
 
-    <h1 class="titulo">PRODUTO</h1>
+    <h1 class="titulo">ESTOQUE</h1>
 
     <div class="principal">
 
-        <form th:action="@{/cadastroProduto}" th:object="${produto}" method="post">
+        <form th:action="@{/cadastroEstoque}" th:object="${estoque}" method="post">
 
             <div class="grupo">
                 <label>Cód Produto: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto">
-                <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
+                <input type="text" th:field="*{produto}" placeholder="Digite o nome do cliente">
+                <small th:if="${#fields.hasErrors('produto')}" th:errors="*{produto}" class="erro"></small>
             </div>
 
             <!-- CAMPO NOME -->
             <div class="grupo">
-                <label>preco: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{preco}" placeholder="Digite o nome do cliente">
-                <small th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}" class="erro"></small>
+                <label>Quantidade: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{quantidade}" placeholder="Digite o nome do cliente">
+                    <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
             </div>
 
 
             <button type="submit" class="btn-cadastrar">
-                <span th:text="${produto.idProduto != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
+                <span th:text="${estoque.idEstoque != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
         </form>
 

@@ -1,23 +1,11 @@
 package br.com.bakeflow.bakeflow.model;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
@@ -25,16 +13,14 @@ import jakarta.validation.constraints.NotEmpty;
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_pedido")
-    private long idPedido;
+    private Long idPedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
-    
 
     @Column(name = "data")
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,22 +36,22 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item_Pedido> itens = new ArrayList<>();
 
-    // Getters e Setters para itensPedido
+    // Getters & Setters
     public List<Item_Pedido> getItens() {
         return itens;
     }
 
-    public void setItensPedido(List<Item_Pedido> itensPedido) {
+    // CORREÇÃO: setter deve receber o parâmetro e atribuí-lo
+    public void setItens(List<Item_Pedido> itens) {
         this.itens = itens;
     }
 
-
-    public long getIdPedido() {
+    public Long getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(long ID_Pedido) {
-        this.idPedido = ID_Pedido;
+    public void setIdPedido(Long idPedido) {
+        this.idPedido = idPedido;
     }
 
     public Cliente getCliente() {
@@ -96,7 +82,7 @@ public class Pedido implements Serializable {
         return valorTotal;
     }
 
-    public void setValorTotal(BigDecimal valor_total) {
-        this.valorTotal = valor_total;
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
 }

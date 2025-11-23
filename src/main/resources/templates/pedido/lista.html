@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Pedidos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="menu-superior">
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Início</a></li>
+            <li><a th:href="@{/pedidos}">Pedidos</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="container">
+    <h1>Lista de Pedidos</h1>
+
+    <a th:href="@{/pedidos/novo}" class="btn-cadastrar">Novo Pedido</a>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Valor Total</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${pedidos}">
+            <td th:text="${p.idPedido}"></td>
+            <td th:text="${p.cliente != null ? p.cliente.nome : '—'}"></td>
+            <td th:text="${#dates.format(p.dataAtualizacao, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${p.status}"></td>
+            <td th:text="${p.valorTotal}"></td>
+            <td>
+                <a th:href="@{'/pedidos/' + ${p.idPedido} + '/editar'}">Editar</a> |
+                <form th:action="@{'/pedidos/' + ${p.idPedido} + '/delete'}" method="post" style="display:inline">
+                    <button type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

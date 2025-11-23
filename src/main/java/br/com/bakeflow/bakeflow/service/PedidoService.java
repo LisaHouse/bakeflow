@@ -24,17 +24,21 @@ public class PedidoService {
         return repository.findById(id).orElse(null);
     }
 
-    public void save(Pedido pedido) {
-
+    public Pedido save(Pedido pedido) {
 
         if (pedido.getItens() != null) {
+            pedido.getItens().removeIf(item ->
+                    (item.getQuantidade() == null || item.getQuantidade() <= 0)
+                            && (item.getValor() == null || item.getValor().compareTo(java.math.BigDecimal.ZERO) <= 0)
+            );
+
+
             for (Item_Pedido item : pedido.getItens()) {
                 item.setPedido(pedido);
             }
         }
 
-        // JPA salva pedido + itens por causa do cascade = CascadeType.ALL
-        repository.save(pedido);
+        return repository.save(pedido);
     }
 
     public void delete(Long id) {

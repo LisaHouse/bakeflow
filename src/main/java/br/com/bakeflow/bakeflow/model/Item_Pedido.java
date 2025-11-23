@@ -2,34 +2,21 @@ package br.com.bakeflow.bakeflow.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "item_pedido")
 public class Item_Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
-    // gera PK
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item_pedido")
-    private long idItemPedido;
-
+    private Long idItemPedido;
 
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
-    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_produto"))
@@ -41,12 +28,13 @@ public class Item_Pedido implements Serializable {
     @Column(name = "valor", precision = 10, scale = 2)
     private BigDecimal valor;
 
-    public long getIdItemPedido() {
+    // Getters & Setters
+    public Long getIdItemPedido() {
         return idItemPedido;
     }
 
-    public void setIdItemPedido(long ID_ItemPedido) {
-        this.idItemPedido = ID_ItemPedido;
+    public void setIdItemPedido(Long idItemPedido) {
+        this.idItemPedido = idItemPedido;
     }
 
     public Pedido getPedido() {

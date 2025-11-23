@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Pedido</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="menu-superior">
+    <nav>
+        <ul>
+            <li><a th:href="@{/index}">Início</a></li>
+            <li><a th:href="@{/pedidos}">Pedidos</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="container">
+    <h1>Cadastro de Pedido</h1>
+
+    <div th:if="${mensagem}">
+        <p th:text="${mensagem}"></p>
+    </div>
+
+    <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post">
+
+        <input type="hidden" th:if="${pedido.idPedido != null}" th:field="*{idPedido}"/>
+
+        <div class="grupo">
+            <label>Cliente (ID):</label>
+            <input type="number" th:field="*{cliente.idCliente}" placeholder="ID do cliente"/>
+        </div>
+
+        <div class="grupo">
+            <label>Data do pedido:</label>
+            <input type="date" th:field="*{dataAtualizacao}"/>
+        </div>
+
+        <div class="grupo">
+            <label>Status:</label>
+            <input type="text" th:field="*{status}"/>
+        </div>
+
+        <h3>Itens</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>ID Produto</th>
+                <th>Quantidade</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaItens" th:each="item, iter : *{itens}">
+            <tr>
+                <td><input type="number" th:field="*{itens[__${iter.index}__].produto.idProduto}"/></td>
+                <td><input type="number" th:field="*{itens[__${iter.index}__].quantidade}" min="1"/></td>
+                <td><input type="number" step="0.01" th:field="*{itens[__${iter.index}__].valor}"/></td>
+                <td><button type="button" onclick="removerItem(this)">Remover</button></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <button type="button" onclick="adicionarItem()">Adicionar Item</button>
+        <br/><br/>
+        <button type="submit">Salvar Pedido</button>
+    </form>
+</section>
+
+<script>
+    function adicionarItem() {
+        const tabela = document.getElementById('tabelaItens');
+        const index = tabela.rows.length;
+        const linha =
+            `<tr>
+                <td><input type="number" name="itens[${index}].produto.idProduto"/></td>
+                <td><input type="number" name="itens[${index}].quantidade" min="1"/></td>
+                <td><input type="number" step="0.01" name="itens[${index}].valor"/></td>
+                <td><button type="button" onclick="removerItem(this)">Remover</button></td>
+            </tr>`;
+        tabela.insertAdjacentHTML('beforeend', linha);
+    }
+
+    function removerItem(btn) {
+        const tr = btn.closest('tr');
+        tr.remove();
+    }
+</script>
+
+</body>
+</html>
