@@ -3,15 +3,7 @@ package br.com.bakeflow.bakeflow.model;
 import java.io.Serializable;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
@@ -23,40 +15,37 @@ public class Endereco implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_endereco")
-    private Long idEndereco;
+    private Long endereco_id;
 
-    @Column(name = "cep", nullable = false, length = 100)
+    @Column(name = "cep")
     @NotEmpty
     private String cep;
 
-    @Column(name = "rua", nullable = false, length = 100)
+    @Column(name = "numero")
     @NotEmpty
-    private String rua;
+    private String numero;
 
-    @Column(name = "uf", nullable = false, length = 100)
-    @NotEmpty
-    private String uf;
+    @Transient
+    private String logradouro;
 
-    @Column(name = "cidade", nullable = false, length = 100)
-    @NotEmpty
+    @Transient
+    private String bairro;
+
+    @Transient
     private String cidade;
 
-    @Column(name = "numero", nullable = false, length = 100)
-    @NotEmpty
-    private double numero;
-
-    @Column(name = "complemento", nullable = false, length = 100)
-    @NotEmpty
-    private String complemento;
+    @Transient
+    private String estado;
 
 
-    public Long getIdEndereco() {
-        return idEndereco;
+    public Long getId() {
+        return endereco_id;
     }
 
-    public void setIdEndereco(Long idEndereco) {
-        this.idEndereco = idEndereco;
+    public void setId(Long id) {
+        this.endereco_id = id;
     }
+
 
     public String getCep() {
         return cep;
@@ -66,20 +55,28 @@ public class Endereco implements Serializable {
         this.cep = cep;
     }
 
-    public String getRua() {
-        return rua;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public String getUf() {
-        return uf;
+    public String getLogradouro() {
+        return logradouro;
     }
 
-    public void setUf(String uf) {
-        this.uf = uf;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
     public String getCidade() {
@@ -90,19 +87,11 @@ public class Endereco implements Serializable {
         this.cidade = cidade;
     }
 
-    public double getNumero() {
-        return numero;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setNumero(double numero) {
-        this.numero = numero;
-    }
-
-    public String getComplemento() {
-        return complemento;
-    }
-
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

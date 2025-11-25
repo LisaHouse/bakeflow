@@ -1,32 +1,31 @@
 package br.com.bakeflow.bakeflow.service;
 
 import br.com.bakeflow.bakeflow.model.Endereco;
-import br.com.bakeflow.bakeflow.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.Map;
+
 @Service
 public class EnderecoService {
 
-    private final EnderecoRepository repository;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public EnderecoService(EnderecoRepository repository) {
-        this.repository = repository;
-    }
+    public Endereco buscarCep(String cep) {
 
-    public List<Endereco> findAll() {
-        return repository.findAll();
-    }
+        String url = "https://viacep.com.br/ws/" + cep + "/json/";
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
 
-    public Endereco findById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
+        Endereco endereco = new Endereco();
+        endereco.setCep(cep);
 
-    public void save(Endereco endereco) {
-        repository.save(endereco);
-    }
+        if (response != null && !response.containsKey("erro")) {
+            endereco.setLogradouro((String) response.get("logradouro"));
+            endereco.setBairro((String) response.get("bairro"));
+            endereco.setCidade((String) response.get("localidade"));
+            endereco.setEstado((String) response.get("uf"));
+        }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+        return endereco;
     }
 }

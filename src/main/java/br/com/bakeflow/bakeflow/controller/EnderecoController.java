@@ -40,7 +40,7 @@ public class EnderecoController {
             return "redirect:/cadastroCliente";
         }
 
-        service.save(endereco);
+       // service.save(endereco);
         attributes.addFlashAttribute("mensagem", "Endereco cadastrado com sucesso!");
         return "redirect:/cadastroCliente";
     }

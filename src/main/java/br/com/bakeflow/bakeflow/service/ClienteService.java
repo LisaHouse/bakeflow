@@ -2,6 +2,7 @@ package br.com.bakeflow.bakeflow.service;
 
 import br.com.bakeflow.bakeflow.model.Cliente;
 import br.com.bakeflow.bakeflow.repository.ClienteRepository;
+import br.com.bakeflow.bakeflow.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository repository;
-
     public ClienteService(ClienteRepository repository) {
         this.repository = repository;
     }

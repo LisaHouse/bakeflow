@@ -31,10 +31,6 @@ public class Produto implements Serializable {
     @Column(name = "preco", precision = 10, scale = 2)
     private BigDecimal preco;
 
-    // OneToMany para Estoque (um produto pode ter várias entradas de estoque)
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Estoque> estoques;
-
     // Construtores
     public Produto() {}
 
@@ -53,7 +49,6 @@ public class Produto implements Serializable {
     public BigDecimal getPreco() { return preco; }
     public void setPreco(BigDecimal preco) { this.preco = preco; }
 
-    public List<Estoque> getEstoques() { return estoques; }
-    public void setEstoques(List<Estoque> estoques) { this.estoques = estoques; }
+
 
 }

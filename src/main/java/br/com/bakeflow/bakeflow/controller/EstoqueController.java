@@ -1,9 +1,11 @@
 package br.com.bakeflow.bakeflow.controller;
 
 import br.com.bakeflow.bakeflow.model.Estoque;
+import br.com.bakeflow.bakeflow.model.Produto;
 import br.com.bakeflow.bakeflow.service.EstoqueService;
-import io.swagger.v3.oas.annotations.Operation;
+import br.com.bakeflow.bakeflow.service.ProdutoService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,32 +18,50 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cadastroEstoque")
 public class EstoqueController {
 
-    private final EstoqueService service;
+    @Autowired
+    private EstoqueService estoqueService;
 
-    public EstoqueController(EstoqueService service) {
-        this.service = service;
-    }
-
+    @Autowired
+    private ProdutoService produtoService;
 
     @GetMapping
-    public String showForm(Model model) {
-        if (!model.containsAttribute("estoque")) {
-            model.addAttribute("estoque", new Estoque());
-        }
+    public String novo(Model model) {
+
+        model.addAttribute("estoque", new Estoque());
+        model.addAttribute("produtos", produtoService.findAll());
+
         return "cadastroEstoque";
     }
 
     @PostMapping
-    @Operation(summary = "endpoint para cadastro de estoque")
-    public String submitForm(@Valid Estoque estoque, BindingResult result, RedirectAttributes attributes) {
+    public String salvar(@Valid Estoque estoque, BindingResult result, RedirectAttributes attributes) {
+
         if (result.hasErrors()) {
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.estoque", result);
             attributes.addFlashAttribute("estoque", estoque);
             return "redirect:/cadastroEstoque";
         }
 
-        service.save(estoque);
-        attributes.addFlashAttribute("mensagem", "estoque cadastrado com sucesso!");
+        Long idProduto = estoque.getProduto().getIdProduto();
+        Produto produto = produtoService.findById(idProduto);
+        estoque.setProduto(produto);
+
+        Estoque estoqueExistente = estoqueService.buscarPorProduto(idProduto);
+
+        if (estoqueExistente != null) {
+            estoqueExistente.setQuantidade(estoque.getQuantidade());
+            estoqueService.save(estoqueExistente);
+
+            attributes.addFlashAttribute("mensagem", "Estoque atualizado com sucesso!");
+        } else {
+            estoqueService.save(estoque);
+            attributes.addFlashAttribute("mensagem", "Estoque cadastrado com sucesso!");
+        }
+
         return "redirect:/cadastroEstoque";
     }
+
+
+
 }
+

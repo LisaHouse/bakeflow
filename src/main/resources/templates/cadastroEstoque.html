@@ -3,46 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estoque</title>
+    <title>Cadastro de Estoque</title>
     <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
 <header class="menu-superior">
     <nav>
         <ul>
             <li><a href="/">Início</a></li>
-            <li><a href="/cadastroEstoque">Clientes</a></li>
-            <li><a href="#">Relatórios</a></li>
+            <li><a href="/cadastroCliente">Clientes</a></li>
+            <li><a href="/cadastroEstoque">Estoque</a></li>
         </ul>
     </nav>
 </header>
 
 <section class="container">
 
-    <h1 class="titulo">ESTOQUE</h1>
+    <h1 class="titulo">CADASTRO DE ESTOQUE</h1>
 
     <div class="principal">
 
+
+        <div th:if="${mensagem}" class="alert alert-success">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+
         <form th:action="@{/cadastroEstoque}" th:object="${estoque}" method="post">
 
-            <div class="grupo">
-                <label>Cód Produto: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{produto}" placeholder="Digite o nome do cliente">
-                <small th:if="${#fields.hasErrors('produto')}" th:errors="*{produto}" class="erro"></small>
-            </div>
 
-            <!-- CAMPO NOME -->
             <div class="grupo">
                 <label>Quantidade: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{quantidade}" placeholder="Digite o nome do cliente">
-                    <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
+                <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade">
+                <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
             </div>
 
+
+            <div class="grupo">
+                <label>Produto: <span class="obrigatorio">*</span></label>
+
+                <select th:field="*{produto.idProduto}">
+                    <option value="">Selecione um produto</option>
+                    <option th:each="p : ${produtos}"
+                            th:value="${p.idProduto}"
+                            th:text="${p.nome}">
+                    </option>
+                </select>
+
+                <small th:if="${#fields.hasErrors('produto.idProduto')}" th:errors="*{produto.idProduto}" class="erro"></small>
+            </div>
 
             <button type="submit" class="btn-cadastrar">
                 <span th:text="${estoque.idEstoque != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
+
         </form>
 
     </div>

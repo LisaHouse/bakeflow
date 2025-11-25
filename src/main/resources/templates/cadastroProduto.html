@@ -27,14 +27,14 @@
         <form th:action="@{/cadastroProduto}" th:object="${produto}" method="post">
 
             <div class="grupo">
-                <label>Cód Produto: <span class="obrigatorio">*</span></label>
+                <label>Nome Produto: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto">
                 <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
             <!-- CAMPO NOME -->
             <div class="grupo">
-                <label>preco: <span class="obrigatorio">*</span></label>
+                <label>Preço: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{preco}" placeholder="Digite o nome do cliente">
                 <small th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}" class="erro"></small>
             </div>

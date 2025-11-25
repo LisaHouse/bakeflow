@@ -5,6 +5,7 @@ import br.com.bakeflow.bakeflow.model.Produto;
 import br.com.bakeflow.bakeflow.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,23 +18,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cadastroProduto")
 public class ProdutoController {
 
-    private final ProdutoService service;
-
-    public ProdutoController(ProdutoService service) {
-        this.service = service;
-    }
+    @Autowired
+    private ProdutoService service;
 
     @GetMapping
-    public String showForm(Model model) {
-        if (!model.containsAttribute("produto")) {
-            model.addAttribute("produto", new Produto());
-        }
+    public String novo(Model model) {
+        model.addAttribute("produto", new Produto());
         return "cadastroProduto";
     }
 
     @PostMapping
-    @Operation(summary = "endpoint para produto")
-    public String submitForm(@Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
+    public String salvar(@Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
+
         if (result.hasErrors()) {
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.produto", result);
             attributes.addFlashAttribute("produto", produto);
@@ -41,7 +37,8 @@ public class ProdutoController {
         }
 
         service.save(produto);
-        attributes.addFlashAttribute("mensagem", "produto cadastrado com sucesso!");
+
+        attributes.addFlashAttribute("mensagem", "Produto cadastrado com sucesso!");
         return "redirect:/cadastroProduto";
     }
 }

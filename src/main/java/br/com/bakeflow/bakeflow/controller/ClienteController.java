@@ -1,8 +1,11 @@
 package br.com.bakeflow.bakeflow.controller;
 
+import br.com.bakeflow.bakeflow.model.Endereco;
 import br.com.bakeflow.bakeflow.service.ClienteService;
+import br.com.bakeflow.bakeflow.service.EnderecoService;
 import jakarta.validation.Valid;
 import br.com.bakeflow.bakeflow.model.Cliente;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,22 +18,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cadastroCliente")
 public class ClienteController {
 
-    private final ClienteService service;
+    @Autowired
+    private ClienteService clienteService;
 
-    public ClienteController(ClienteService service) {
-        this.service = service;
-    }
+    @Autowired
+    private EnderecoService enderecoService;
 
     @GetMapping
-    public String showForm(Model model) {
-        if (!model.containsAttribute("cliente")) {
-            model.addAttribute("cliente", new Cliente());
-        }
+    public String novoCliente(Model model) {
+        model.addAttribute("cliente", new Cliente());
         return "cadastroCliente";
     }
 
     @PostMapping
-    public String submitForm(@Valid Cliente cliente, BindingResult result,
+    public String submitForm(@Valid Cliente cliente,
+                             BindingResult result,
                              RedirectAttributes attributes) {
 
         if (result.hasErrors()) {
@@ -39,8 +41,20 @@ public class ClienteController {
             return "redirect:/cadastroCliente";
         }
 
-        service.save(cliente);
+
+        Endereco endereco = cliente.getEndereco();
+
+        // API
+        Endereco apiEndereco = enderecoService.buscarCep(endereco.getCep());
+        endereco.setLogradouro(apiEndereco.getLogradouro());
+        endereco.setBairro(apiEndereco.getBairro());
+        endereco.setCidade(apiEndereco.getCidade());
+        endereco.setEstado(apiEndereco.getEstado());
+
+        clienteService.save(cliente);
+
         attributes.addFlashAttribute("mensagem", "Cliente cadastrado com sucesso!");
         return "redirect:/cadastroCliente";
     }
 }
+

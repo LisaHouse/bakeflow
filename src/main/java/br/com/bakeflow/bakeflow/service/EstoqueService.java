@@ -22,6 +22,10 @@ public class EstoqueService {
         return repository.findById(id).orElse(null);
     }
 
+    public Estoque buscarPorProduto(Long idProduto) {
+        return repository.findByProdutoIdProduto(idProduto).orElse(null);
+    }
+
     public void save(Estoque estoque) {
         repository.save(estoque);
     }
@@ -29,4 +33,6 @@ public class EstoqueService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+
 }

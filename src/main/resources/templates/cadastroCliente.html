@@ -5,6 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente</title>
     <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            function limpa_formulario_cep() {
+                $("#logradouro").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+            }
+
+            $("#cep").blur(function() {
+                var cep = $(this).val().replace(/\D/g, '');
+
+                if (cep !== "") {
+                    var validacep = /^[0-9]{8}$/;
+
+                    if(validacep.test(cep)) {
+
+                        $("#logradouro").val("...");
+                        $("#bairro").val("...");
+                        $("#cidade").val("...");
+                        $("#uf").val("...");
+
+                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
+
+                            if (!("erro" in dados)) {
+                                $("#logradouro").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#uf").val(dados.uf);
+                            } else {
+                                limpa_formulario_cep();
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } else {
+                        limpa_formulario_cep();
+                        alert("Formato de CEP inválido.");
+                    }
+                } else {
+                    limpa_formulario_cep();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -24,32 +73,65 @@
 
     <div class="principal">
 
+        <!-- FORM ÚNICO: CLIENTE + ENDEREÇO -->
         <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post">
 
-            <!-- CAMPO NOME -->
+            <!-- NOME -->
             <div class="grupo">
                 <label>Nome Completo: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{nome}" placeholder="Digite o nome do cliente">
                 <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
+            <!-- TELEFONE -->
             <div class="grupo">
                 <label>Telefone: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{telefone}" placeholder="Digite o telefone">
                 <small th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="erro"></small>
             </div>
 
+            <h3>Endereço</h3>
+
+            <!-- CEP -->
             <div class="grupo">
-                <label>Endereço: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{endereco}" placeholder="Digite o endereço completo">
-                <small th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}" class="erro"></small>
+                <label>CEP: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{endereco.cep}" id="cep" placeholder="Digite o CEP">
+                <small th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}" class="erro"></small>
+            </div>
+
+            <!-- Número (único campo além do CEP que será salvo) -->
+            <div class="grupo">
+                <label>Número: <span class="obrigatorio">*</span></label>
+                <input type="text" th:field="*{endereco.numero}" placeholder="Nº da residência">
+                <small th:if="${#fields.hasErrors('endereco.numero')}" th:errors="*{endereco.numero}" class="erro"></small>
+            </div>
+
+            <!-- CAMPOS QUE VEM DA API (NÃO SALVAM NO BANCO) -->
+            <div class="grupo">
+                <label>Logradouro:</label>
+                <input type="text" id="logradouro" th:value="*{endereco.logradouro}" readonly>
+            </div>
+
+            <div class="grupo">
+                <label>Bairro:</label>
+                <input type="text" id="bairro" th:value="*{endereco.bairro}" readonly>
+            </div>
+
+            <div class="grupo">
+                <label>Cidade:</label>
+                <input type="text" id="cidade" th:value="*{endereco.cidade}" readonly>
+            </div>
+
+            <div class="grupo">
+                <label>Estado:</label>
+                <input type="text" id="uf" th:value="*{endereco.estado}" readonly>
             </div>
 
             <button type="submit" class="btn-cadastrar">
                 <span th:text="${cliente.idCliente != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
-        </form>
 
+        </form>
     </div>
 </section>
 
