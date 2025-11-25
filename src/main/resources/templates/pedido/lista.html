@@ -9,8 +9,17 @@
 <header class="menu-superior">
     <nav>
         <ul>
-            <li><a th:href="@{/}">Início</a></li>
-            <li><a th:href="@{/pedidos}">Pedidos</a></li>
+            <li><a href="/Index">Início</a></li>
+            <li class="cadastros-dropdown">
+                <p>Cadastros</p>
+                <ul class="submenu">
+                    <li><a href="/cadastroCliente">Cliente</a></li>
+                    <li><a href="/cadastroProduto">Produto</a></li>
+                    <li><a href="/cadastroEstoque">Estoque</a></li>
+                    <li><a href="/pedidos/novo">Pedido</a></li>
+                </ul>
+            </li></li>
+            <li><a href="#">Relatórios</a></li>
         </ul>
     </nav>
 </header>
