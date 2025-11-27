@@ -33,7 +33,7 @@ public class PedidoController {
     }
 
     // lista pedidos com excluir ou alterar
-    @GetMapping
+    @GetMapping("/relatorio")
     public String listar(Model model) {
         model.addAttribute("pedidos", pedidoService.findAll());
         return "pedido/lista";

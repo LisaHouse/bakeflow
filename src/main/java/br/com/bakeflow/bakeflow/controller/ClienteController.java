@@ -30,6 +30,12 @@ public class ClienteController {
         return "cadastroCliente";
     }
 
+    @GetMapping("/relatorio")
+    public String listar(Model model) {
+        model.addAttribute("cliente", clienteService.findAll());
+        return "cadastroCliente";
+    }
+
     @PostMapping
     public String submitForm(@Valid Cliente cliente,
                              BindingResult result,
