@@ -1,61 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Pedidos</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
 <header class="menu-superior">
     <nav>
         <ul>
-            <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li></li>
-            <li><a href="#">Relatórios</a></li>
+            <li><a href="/">Início</a></li>
+            <li><a href="/cadastroCliente">Clientes</a></li>
+            <li><a href="/cadastroEstoque">Estoque</a></li>
+            <li><a href="/pedidos">Pedidos</a></li>
         </ul>
     </nav>
 </header>
 
 <section class="container">
-    <h1>Lista de Pedidos</h1>
 
-    <a th:href="@{/pedidos/novo}" class="btn-cadastrar">Novo Pedido</a>
+    <h1 class="titulo">Pedidos Registrados</h1>
 
-    <table border="1">
+    <a href="/pedidos/novo" class="btn-cadastrar">Novo Pedido</a>
+
+    <table class="tabela-itens">
         <thead>
         <tr>
             <th>ID</th>
             <th>Cliente</th>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Valor Total</th>
+            <th>Total</th>
+            <th>Itens</th>
             <th>Ações</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="p : ${pedidos}">
             <td th:text="${p.idPedido}"></td>
-            <td th:text="${p.cliente != null ? p.cliente.nome : '—'}"></td>
-            <td th:text="${#dates.format(p.dataAtualizacao, 'dd/MM/yyyy HH:mm')}"></td>
-            <td th:text="${p.status}"></td>
+            <td th:text="${p.cliente.nome}"></td>
             <td th:text="${p.valorTotal}"></td>
+
             <td>
-                <a th:href="@{'/pedidos/' + ${p.idPedido} + '/editar'}">Editar</a> |
-                <form th:action="@{'/pedidos/' + ${p.idPedido} + '/delete'}" method="post" style="display:inline">
-                    <button type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
-                </form>
+                <ul>
+                    <li th:each="i : ${p.itens}">
+                        <span th:text="${i.produto.nome}"></span>
+                        (<span th:text="${i.quantidade}"></span>)
+                    </li>
+                </ul>
+            </td>
+
+            <td>
+                <a th:href="@{'/pedidos/editar/' + ${p.idPedido}}">Editar</a>
+                <a th:href="@{'/pedidos/excluir/' + ${p.idPedido}}"
+                   onclick="return confirm('Deseja excluir?')">Excluir</a>
             </td>
         </tr>
         </tbody>
     </table>
+
 </section>
+
 </body>
 </html>

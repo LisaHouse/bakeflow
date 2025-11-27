@@ -1,99 +1,192 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Pedido</title>
+    <title>Novo Pedido</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
 <header class="menu-superior">
     <nav>
         <ul>
-            <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li></li>
-            <li><a href="#">Relatórios</a></li>
+            <li><a href="/">Início</a></li>
+            <li><a href="/cadastroCliente">Clientes</a></li>
+            <li><a href="/cadastroEstoque">Estoque</a></li>
+            <li><a href="/pedidos">Pedidos</a></li>
         </ul>
     </nav>
 </header>
 
 <section class="container">
-    <h1>Cadastro de Pedido</h1>
 
-    <div th:if="${mensagem}">
-        <p th:text="${mensagem}"></p>
-    </div>
+    <h1 class="titulo">Cadastro de Pedido</h1>
+
 
     <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post">
 
-        <input type="hidden" th:if="${pedido.idPedido != null}" th:field="*{idPedido}"/>
+        <!-- hidden pois cod é gerado automatico para PK mas precisa ser inserido no objeto -->
+        <input type="hidden" th:field="*{idPedido}"/>
+
 
         <div class="grupo">
-            <label>Cliente (ID):</label>
-            <input type="number" th:field="*{cliente.idCliente}" placeholder="ID do cliente"/>
+            <label>Cliente:</label>
+            <select th:field="*{cliente.idCliente}">
+                <option value="">Selecione...</option>
+                <option th:each="c : ${clientes}"
+                        th:value="${c.idCliente}"
+                        th:text="${c.nome}">
+                </option>
+            </select>
         </div>
 
-        <div class="grupo">
-            <label>Data do pedido:</label>
-            <input type="date" th:field="*{dataAtualizacao}"/>
-        </div>
+        <label>Status:</label>
+        <input type="text" name="status" value="Aberto"/>
 
-        <div class="grupo">
-            <label>Status:</label>
-            <input type="text" th:field="*{status}"/>
-        </div>
+        <h3>Itens do Pedido</h3>
 
-        <h3>Itens</h3>
-        <table>
+        <table class="tabela-itens">
             <thead>
             <tr>
-                <th>ID Produto</th>
-                <th>Quantidade</th>
+                <th>Produto</th>
+                <th>Estoque</th>
+                <th>Qtd</th>
                 <th>Valor</th>
-                <th>Ações</th>
+                <th></th>
             </tr>
             </thead>
-            <tbody id="tabelaItens" th:each="item, iter : *{itens}">
-            <tr>
-                <td><input type="number" th:field="*{itens[__${iter.index}__].produto.idProduto}"/></td>
-                <td><input type="number" th:field="*{itens[__${iter.index}__].quantidade}" min="1"/></td>
-                <td><input type="number" step="0.01" th:field="*{itens[__${iter.index}__].valor}"/></td>
-                <td><button type="button" onclick="removerItem(this)">Remover</button></td>
+
+            <tbody id="tabelaItens">
+
+            <!-- ajuste para primeiro item default que não estava buscando estoque e valor -->
+            <tr th:each="item, iter : *{itens}">
+
+
+                <td>
+                    <select class="produtoSelect"
+                            th:name="'itens[' + ${iter.index} + '].produto.idProduto'"
+                            th:onchange="|buscarDadosProduto(this, ${iter.index})|">
+
+                        <option value="">Selecione...</option>
+
+                        <option th:each="p : ${produtos}"
+                                th:value="${p.idProduto}"
+                                th:text="${p.nome}">
+                        </option>
+                    </select>
+                </td>
+
+
+                <td>
+                    <span th:id="'estoque_' + ${iter.index}">—</span>
+                </td>
+
+
+                <td>
+                    <input type="number" min="1"
+                           th:name="'itens[' + ${iter.index} + '].quantidade'">
+                </td>
+
+
+                <td>
+                    <input type="number" step="0.01" readonly
+                           th:name="'itens[' + ${iter.index} + '].valor'">
+                </td>
+
+                <td>
+                    <button type="button" onclick="removerItem(this)">X</button>
+                </td>
             </tr>
+
             </tbody>
         </table>
 
+        <br>
+
         <button type="button" onclick="adicionarItem()">Adicionar Item</button>
-        <br/><br/>
         <button type="submit">Salvar Pedido</button>
+
     </form>
+
 </section>
 
+
+<!-- script, usado para fazer as buscas de informações ja cadastradas na tela -->
 <script>
-    function adicionarItem() {
-        const tabela = document.getElementById('tabelaItens');
-        const index = tabela.rows.length;
-        const linha =
-            `<tr>
-                <td><input type="number" name="itens[${index}].produto.idProduto"/></td>
-                <td><input type="number" name="itens[${index}].quantidade" min="1"/></td>
-                <td><input type="number" step="0.01" name="itens[${index}].valor"/></td>
-                <td><button type="button" onclick="removerItem(this)">Remover</button></td>
-            </tr>`;
-        tabela.insertAdjacentHTML('beforeend', linha);
+
+    function buscarDadosProduto(select, index) {
+
+        const idProd = select.value;
+
+        const estoqueSpan = document.getElementById("estoque_" + index);
+        const inputValor = document.querySelector(`input[name="itens[${index}].valor"]`);
+
+        if (!idProd) {
+            estoqueSpan.textContent = "—";
+            inputValor.value = "";
+            return;
+        }
+
+
+        fetch("/api/estoque/" + idProd)
+            .then(r => r.json())
+            .then(qtd => estoqueSpan.textContent = qtd)
+            .catch(() => estoqueSpan.textContent = "erro");
+
+
+        fetch("/api/produto/" + idProd)
+            .then(r => r.json())
+            .then(p => {
+                if (inputValor) inputValor.value = p.preco;
+            })
+            .catch(() => {
+                if (inputValor) inputValor.value = "";
+            });
     }
 
-    function removerItem(btn) {
-        const tr = btn.closest('tr');
-        tr.remove();
+
+    function adicionarItem() {
+
+        const tabela = document.getElementById("tabelaItens");
+        const index = tabela.children.length;
+
+        const html = `
+        <tr>
+            <td>
+                <select class="produtoSelect"
+                        name="itens[${index}].produto.idProduto"
+                        onchange="buscarDadosProduto(this, ${index})">
+                    ${window.produtosOptionsHTML}
+                </select>
+            </td>
+
+            <td><span id="estoque_${index}">—</span></td>
+
+            <td><input type="number" min="1" name="itens[${index}].quantidade"></td>
+
+            <td><input type="number" step="0.01" name="itens[${index}].valor" readonly></td>
+
+            <td><button type="button" onclick="removerItem(this)">X</button></td>
+        </tr>
+    `;
+
+        tabela.insertAdjacentHTML("beforeend", html);
     }
+
+
+    function removerItem(btn) {
+        btn.closest("tr").remove();
+    }
+
+
+    window.addEventListener("load", function() {
+        const firstSelect = document.querySelector(".produtoSelect");
+        if (firstSelect) {
+            window.produtosOptionsHTML = firstSelect.innerHTML;
+        }
+    });
 </script>
 
 </body>

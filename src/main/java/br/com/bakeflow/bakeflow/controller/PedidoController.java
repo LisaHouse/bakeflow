@@ -1,8 +1,11 @@
 package br.com.bakeflow.bakeflow.controller;
 
-import br.com.bakeflow.bakeflow.model.Pedido;
+import br.com.bakeflow.bakeflow.model.Cliente;
 import br.com.bakeflow.bakeflow.model.Item_Pedido;
+import br.com.bakeflow.bakeflow.model.Pedido;
+import br.com.bakeflow.bakeflow.service.ClienteService;
 import br.com.bakeflow.bakeflow.service.PedidoService;
+import br.com.bakeflow.bakeflow.service.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,78 +13,100 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
+import java.util.Iterator;
+
 @Controller
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    private final PedidoService service;
+    private final PedidoService pedidoService;
+    private final ClienteService clienteService;
+    private final ProdutoService produtoService;
 
-    public PedidoController(PedidoService service) {
-        this.service = service;
+    public PedidoController(PedidoService pedidoService,
+                            ClienteService clienteService,
+                            ProdutoService produtoService) {
+        this.pedidoService = pedidoService;
+        this.clienteService = clienteService;
+        this.produtoService = produtoService;
     }
 
-    // LISTAR
+    // lista pedidos com excluir ou alterar
     @GetMapping
     public String listar(Model model) {
-        model.addAttribute("pedidos", service.findAll());
+        model.addAttribute("pedidos", pedidoService.findAll());
         return "pedido/lista";
     }
 
-    // FORM PARA NOVO
+    // incluir pedido
     @GetMapping("/novo")
     public String novo(Model model) {
-        if (!model.containsAttribute("pedido")) {
-            Pedido pedido = new Pedido();
-            // garante 1 linha de item para o formulário
-            pedido.getItens().add(new Item_Pedido());
-            model.addAttribute("pedido", pedido);
-        }
-        return "pedido/form";
-    }
+
+        Pedido pedido = new Pedido();
 
 
-    @GetMapping("/{id}/editar")
-    public String editar(@PathVariable Long id, Model model, RedirectAttributes attributes) {
-        Pedido pedido = service.findById(id);
-        if (pedido == null) {
-            attributes.addFlashAttribute("erro", "Pedido não encontrado");
-            return "redirect:/pedidos";
-        }
-        if (pedido.getItens() == null || pedido.getItens().isEmpty()) {
-            pedido.getItens().add(new Item_Pedido());
-        }
+        pedido.getItens().add(new Item_Pedido());
+
         model.addAttribute("pedido", pedido);
+        model.addAttribute("clientes", clienteService.findAll());
+        model.addAttribute("produtos", produtoService.findAll());
+
         return "pedido/form";
     }
 
-
+    // salvar pedido
     @PostMapping("/salvar")
-    public String salvar(@Valid @ModelAttribute Pedido pedido, BindingResult result, RedirectAttributes attributes) {
+    public String salvar(@Valid @ModelAttribute Pedido pedido,
+                         BindingResult result,
+                         RedirectAttributes attributes,
+                         Model model) {
 
-        // validação simples: garantir pelo menos um item
-        if (pedido.getItens() == null || pedido.getItens().stream().allMatch(i ->
-                (i.getQuantidade() == null || i.getQuantidade() <= 0) &&
-                        (i.getValor() == null || i.getValor().compareTo(java.math.BigDecimal.ZERO) <= 0)
-        )) {
-            result.reject("itens.empty", "Adicione ao menos 1 item válido ao pedido.");
+        //ajuste da data do pedido
+        if (pedido.getDataAtualizacao() == null) {
+            pedido.setDataAtualizacao(new Date());
         }
 
-        if (result.hasErrors()) {
-            attributes.addFlashAttribute("org.springframework.validation.BindingResult.pedido", result);
-            attributes.addFlashAttribute("pedido", pedido);
+        //tratamento de inserir pedido sem produto selecionado
+        Iterator<Item_Pedido> it = pedido.getItens().iterator();
+        while (it.hasNext()) {
+            Item_Pedido item = it.next();
+
+            if (item.getProduto() == null ||
+                    item.getProduto().getIdProduto() == null ||
+                    item.getQuantidade() == null ||
+                    item.getQuantidade() <= 0) {
+                it.remove();
+            } else {
+                // vincular item ↦ pedido
+                item.setPedido(pedido);
+            }
+        }
+
+        if (pedido.getItens().isEmpty()) {
+            attributes.addFlashAttribute("erro", "Adicione ao menos 1 item ao pedido.");
             return "redirect:/pedidos/novo";
         }
 
-        service.save(pedido);
-        attributes.addFlashAttribute("mensagem", "Pedido salvo com sucesso!");
-        return "redirect:/pedidos";
-    }
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("pedido", pedido);
+            attributes.addFlashAttribute("org.springframework.validation.BindingResult.pedido", result);
+            return "redirect:/pedidos/novo";
+        }
 
+        //busca cliente
+        Cliente c = clienteService.findById(pedido.getCliente().getIdCliente());
+        pedido.setCliente(c);
 
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, RedirectAttributes attributes) {
-        service.delete(id);
-        attributes.addFlashAttribute("mensagem", "Pedido removido com sucesso!");
-        return "redirect:/pedidos";
+        //salvar pedido
+        try {
+            pedidoService.save(pedido);
+        } catch (RuntimeException e) {
+            attributes.addFlashAttribute("erro", e.getMessage());
+            return "redirect:/pedidos/novo";
+        }
+
+        attributes.addFlashAttribute("mensagem", "Pedido cadastrado com sucesso!");
+        return "redirect:/pedidos/novo";
     }
 }

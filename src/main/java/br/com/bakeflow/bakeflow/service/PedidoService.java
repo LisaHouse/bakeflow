@@ -1,47 +1,63 @@
 package br.com.bakeflow.bakeflow.service;
 
-import br.com.bakeflow.bakeflow.model.Item_Pedido;
-import br.com.bakeflow.bakeflow.model.Pedido;
+import br.com.bakeflow.bakeflow.model.*;
 import br.com.bakeflow.bakeflow.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class PedidoService {
 
     private final PedidoRepository repository;
+    private final ProdutoService produtoService;
+    private final EstoqueService estoqueService;
 
-    public PedidoService(PedidoRepository repository) {
+    public PedidoService(PedidoRepository repository,
+                         ProdutoService produtoService,
+                         EstoqueService estoqueService) {
         this.repository = repository;
+        this.produtoService = produtoService;
+        this.estoqueService = estoqueService;
     }
+
 
     public List<Pedido> findAll() {
-        return repository.findAll();
-    }
-
-    public Pedido findById(Long id) {
-        return repository.findById(id).orElse(null);
+        return repository.findAllWithClienteAndItens();
     }
 
     public Pedido save(Pedido pedido) {
 
-        if (pedido.getItens() != null) {
-            pedido.getItens().removeIf(item ->
-                    (item.getQuantidade() == null || item.getQuantidade() <= 0)
-                            && (item.getValor() == null || item.getValor().compareTo(java.math.BigDecimal.ZERO) <= 0)
-            );
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Item_Pedido item : pedido.getItens()) {
 
 
-            for (Item_Pedido item : pedido.getItens()) {
-                item.setPedido(pedido);
+            Produto p = produtoService.findById(item.getProduto().getIdProduto());
+            item.setProduto(p);
+
+
+            Estoque est = estoqueService.buscarPorProduto(p.getIdProduto());
+            if (est == null || est.getQuantidade() < item.getQuantidade()) {
+                throw new RuntimeException("Estoque insuficiente para o produto: " + p.getNome());
             }
+
+            // descontar estoque
+            est.setQuantidade(est.getQuantidade() - item.getQuantidade());
+            estoqueService.save(est);
+
+            // soma valor dos itens
+            BigDecimal valor = p.getPreco().multiply(BigDecimal.valueOf(item.getQuantidade()));
+            item.setValor(valor);
+
+            total = total.add(valor);
+
+
+            item.setPedido(pedido);
         }
 
-        return repository.save(pedido);
-    }
+        pedido.setValorTotal(total);
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+        return repository.save(pedido);
     }
 }

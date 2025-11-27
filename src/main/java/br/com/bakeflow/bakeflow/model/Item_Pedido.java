@@ -19,7 +19,7 @@ public class Item_Pedido implements Serializable {
     private Pedido pedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "fk_itempedido_produto"))
+    @JoinColumn(name = "id_produto", nullable = false)
     private Produto produto;
 
     @Column(name = "quantidade", nullable = false)
@@ -28,7 +28,6 @@ public class Item_Pedido implements Serializable {
     @Column(name = "valor", precision = 10, scale = 2)
     private BigDecimal valor;
 
-    // Getters & Setters
     public Long getIdItemPedido() {
         return idItemPedido;
     }

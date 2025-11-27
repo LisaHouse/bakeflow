@@ -19,7 +19,7 @@ public class Produto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // Cria PK
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_produto")
@@ -31,7 +31,7 @@ public class Produto implements Serializable {
     @Column(name = "preco", precision = 10, scale = 2)
     private BigDecimal preco;
 
-    // Construtores
+
     public Produto() {}
 
     public Produto(String nome, BigDecimal preco) {
@@ -39,7 +39,7 @@ public class Produto implements Serializable {
         this.preco = preco;
     }
 
-    // getters/setters
+
     public Long getIdProduto() { return idProduto; }
     public void setIdProduto(Long idProduto) { this.idProduto = idProduto; }
 

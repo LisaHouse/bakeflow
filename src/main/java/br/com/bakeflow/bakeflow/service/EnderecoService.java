@@ -11,6 +11,7 @@ public class EnderecoService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    //API VIACEP
     public Endereco buscarCep(String cep) {
 
         String url = "https://viacep.com.br/ws/" + cep + "/json/";

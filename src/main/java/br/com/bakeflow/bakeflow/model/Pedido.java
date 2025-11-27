@@ -36,12 +36,11 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item_Pedido> itens = new ArrayList<>();
 
-    // Getters & Setters
+
     public List<Item_Pedido> getItens() {
         return itens;
     }
 
-    // CORREÇÃO: setter deve receber o parâmetro e atribuí-lo
     public void setItens(List<Item_Pedido> itens) {
         this.itens = itens;
     }

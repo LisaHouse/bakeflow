@@ -81,17 +81,17 @@
 
     <div class="principal">
 
-        <!-- FORM ÚNICO: CLIENTE + ENDEREÇO -->
+
         <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post">
 
-            <!-- NOME -->
+
             <div class="grupo">
                 <label>Nome Completo: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{nome}" placeholder="Digite o nome do cliente">
                 <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
-            <!-- TELEFONE -->
+
             <div class="grupo">
                 <label>Telefone: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{telefone}" placeholder="Digite o telefone">
@@ -100,21 +100,21 @@
 
             <h3>Endereço</h3>
 
-            <!-- CEP -->
+
             <div class="grupo">
                 <label>CEP: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{endereco.cep}" id="cep" placeholder="Digite o CEP">
                 <small th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}" class="erro"></small>
             </div>
 
-            <!-- Número (único campo além do CEP que será salvo) -->
+
             <div class="grupo">
                 <label>Número: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{endereco.numero}" placeholder="Nº da residência">
                 <small th:if="${#fields.hasErrors('endereco.numero')}" th:errors="*{endereco.numero}" class="erro"></small>
             </div>
 
-            <!-- CAMPOS QUE VEM DA API (NÃO SALVAM NO BANCO) -->
+
             <div class="grupo">
                 <label>Logradouro:</label>
                 <input type="text" id="logradouro" th:value="*{endereco.logradouro}" readonly>
