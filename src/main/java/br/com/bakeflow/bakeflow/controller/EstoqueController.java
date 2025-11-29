@@ -31,6 +31,11 @@ public class EstoqueController {
         return "cadastroEstoque";
     }
 
+    @GetMapping("/relatorio")
+    public String listar(Model model) {
+        model.addAttribute("estoque", estoqueService.findAll());
+        return "relatorio/listaEstoque";
+    }
 
     @PostMapping
     public String salvar(@Valid Estoque estoque, BindingResult result, RedirectAttributes attributes) {

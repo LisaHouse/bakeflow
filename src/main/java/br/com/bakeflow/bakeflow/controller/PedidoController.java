@@ -36,7 +36,7 @@ public class PedidoController {
     @GetMapping("/relatorio")
     public String listar(Model model) {
         model.addAttribute("pedidos", pedidoService.findAll());
-        return "pedido/lista";
+        return "relatorio/listaPedido";
     }
 
     // incluir pedido

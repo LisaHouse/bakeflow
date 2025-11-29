@@ -33,7 +33,7 @@ public class ClienteController {
     @GetMapping("/relatorio")
     public String listar(Model model) {
         model.addAttribute("cliente", clienteService.findAll());
-        return "cadastroCliente";
+        return "relatorio/listaCliente";
     }
 
     @PostMapping

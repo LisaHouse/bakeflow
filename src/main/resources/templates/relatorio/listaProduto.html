@@ -24,47 +24,34 @@
             </li></li>
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
+            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
+            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
     </nav>
 </header>
 
 <section class="container">
 
-    <h1 class="titulo">Pedidos Registrados</h1>
+    <h1 class="titulo">Produtos Cadastrados</h1>
 
-    <a href="/pedidos/novo" class="btn-cadastrar">Novo Pedido</a>
+    <a href="/cadastroProduto" class="btn-cadastrar">Novo Produto</a>
 
     <table class="tabela-itens">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Total</th>
-            <th>Itens</th>
-            <th>Ações</th>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Preço</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="p : ${pedidos}">
-            <td th:text="${p.idPedido}"></td>
-            <td th:text="${p.cliente.nome}"></td>
-            <td th:text="${p.valorTotal}"></td>
+        <tr th:each="p : ${produto}">
+            <td th:text="${p.idProduto}"></td>
+            <td th:text="${p.nome}"></td>
+            <td th:text="${p.preco}"></td>
 
-            <td>
-                <ul>
-                    <li th:each="i : ${p.itens}">
-                        <span th:text="${i.produto.nome}"></span>
-                        (<span th:text="${i.quantidade}"></span>)
-                    </li>
-                </ul>
-            </td>
-
-            <td>
-                <a th:href="@{'/pedidos/editar/' + ${p.idPedido}}">Editar</a>
-                <a th:href="@{'/pedidos/excluir/' + ${p.idPedido}}"
-                   onclick="return confirm('Deseja excluir?')">Excluir</a>
-            </td>
         </tr>
         </tbody>
     </table>

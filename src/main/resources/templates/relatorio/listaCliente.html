@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Clientes</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header class="menu-superior">
+    <nav>
+        <ul>
+            <li><a href="/Index">Início</a></li>
+            <li class="cadastros-dropdown">
+                <p>Cadastros</p>
+                <ul class="submenu">
+                    <li><a href="/cadastroCliente">Cliente</a></li>
+                    <li><a href="/cadastroProduto">Produto</a></li>
+                    <li><a href="/cadastroEstoque">Estoque</a></li>
+                    <li><a href="/pedidos/novo">Pedido</a></li>
+                </ul>
+            </li></li>
+            <p>Relatórios</p>
+            <li><a href="/pedidos/relatorio">Pedidos</a></li>
+            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
+            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="container">
+
+    <h1 class="titulo">Clientes Cadastrados</h1>
+
+    <a href="/cadastroCliente" class="btn-cadastrar">Novo Pedido</a>
+
+    <table class="tabela-itens">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Endereço</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="c : ${cliente}">
+            <td th:text="${c.idCliente}"></td>
+            <td th:text="${c.nome}"></td>
+            <td th:text="${c.telefone}"></td>
+
+            <td>
+                <ul>
+                    <li th:each="e : ${c.endereco}">
+                        <span th:text="${e.}"></span>
+                        (<span th:text="${i.quantidade}"></span>)
+                    </li>
+                </ul>
+            </td>
+
+            <td>
+                <a th:href="@{'/pedidos/editar/' + ${p.idPedido}}">Editar</a>
+                <a th:href="@{'/pedidos/excluir/' + ${p.idPedido}}"
+                   onclick="return confirm('Deseja excluir?')">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+
+</body>
+</html>

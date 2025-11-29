@@ -19,12 +19,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProdutoController {
 
     @Autowired
-    private ProdutoService service;
+    private ProdutoService produtoService;
 
     @GetMapping
     public String novo(Model model) {
         model.addAttribute("produto", new Produto());
         return "cadastroProduto";
+    }
+
+    @GetMapping("/relatorio")
+    public String listar(Model model) {
+        model.addAttribute("produto", produtoService.findAll());
+        return "relatorio/listaProduto";
     }
 
     @PostMapping
@@ -36,7 +42,7 @@ public class ProdutoController {
             return "redirect:/cadastroProduto";
         }
 
-        service.save(produto);
+        produtoService.save(produto);
 
         attributes.addFlashAttribute("mensagem", "Produto cadastrado com sucesso!");
         return "redirect:/cadastroProduto";
