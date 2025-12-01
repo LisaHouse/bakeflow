@@ -56,7 +56,7 @@ MySQL
 
 Figma / Canva (para wireframes)
 
-Eclipse (ambiente de desenvolvimento)
+Intellij (ambiente de desenvolvimento)
 
 
  Equipe
