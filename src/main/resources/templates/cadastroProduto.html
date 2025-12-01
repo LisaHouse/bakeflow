@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estoque</title>
+    <title>Produto</title>
     <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -23,7 +23,7 @@
             </li>
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
             <li><a href="/cadastroProduto/relatorio">Produto</a></li>
             <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
@@ -38,23 +38,38 @@
 
         <form th:action="@{/cadastroProduto}" th:object="${produto}" method="post">
 
+            <!-- Campo oculto para permitir edição -->
+            <input type="hidden" th:field="*{idProduto}"/>
+
+            <!-- NOME -->
             <div class="grupo">
                 <label>Nome Produto: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto">
+                <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto" required>
                 <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
-            <!-- CAMPO NOME -->
+            <!-- PREÇO -->
             <div class="grupo">
                 <label>Preço: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{preco}" placeholder="Digite o nome do cliente">
+                <input type="number" th:field="*{preco}" step="0.01" min="0.01"
+                       placeholder="Digite o preço do produto" required>
                 <small th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}" class="erro"></small>
             </div>
 
-
+            <!-- Botão salvar -->
             <button type="submit" class="btn-cadastrar">
                 <span th:text="${produto.idProduto != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
+
+            <!-- Excluir somente se estiver editando -->
+            <div th:if="${produto.idProduto != null}">
+                <a th:href="@{'/cadastroProduto/excluir/' + ${produto.idProduto}}"
+                   onclick="return confirm('Tem certeza que deseja excluir este produto?');"
+                   class="btn-excluir">
+                    Excluir
+                </a>
+            </div>
+
         </form>
 
     </div>

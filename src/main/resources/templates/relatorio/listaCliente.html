@@ -13,6 +13,7 @@
     <nav>
         <ul>
             <li><a href="/Index">Início</a></li>
+
             <li class="cadastros-dropdown">
                 <p>Cadastros</p>
                 <ul class="submenu">
@@ -21,10 +22,11 @@
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
-            </li></li>
+            </li>
+
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
             <li><a href="/cadastroProduto/relatorio">Produto</a></li>
             <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
@@ -35,37 +37,33 @@
 
     <h1 class="titulo">Clientes Cadastrados</h1>
 
-    <a href="/cadastroCliente" class="btn-cadastrar">Novo Pedido</a>
+    <a href="/cadastroCliente" class="btn-cadastrar">Novo Cliente</a>
 
-    <table class="tabela-itens">
+    <table class="tabela-lista">
         <thead>
         <tr>
             <th>ID</th>
             <th>Nome</th>
             <th>Telefone</th>
             <th>Endereço</th>
+            <th>Ações</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="c : ${cliente}">
+        <tr th:each="c : ${lista}">
             <td th:text="${c.idCliente}"></td>
             <td th:text="${c.nome}"></td>
             <td th:text="${c.telefone}"></td>
+            <td th:text="${c.endereco.cep + ' - ' + c.endereco.numero}"></td>
 
-            <td>
-                <ul>
-                    <li th:each="e : ${c.endereco}">
-                        <span th:text="${e.}"></span>
-                        (<span th:text="${i.quantidade}"></span>)
-                    </li>
-                </ul>
-            </td>
+            <td class="acoes">
+                <a th:href="@{'/cadastroCliente/editar/' + ${c.idCliente}}"
+                   class="btn-editar">Editar</a>
 
-            <td>
-                <a th:href="@{'/pedidos/editar/' + ${p.idPedido}}">Editar</a>
-                <a th:href="@{'/pedidos/excluir/' + ${p.idPedido}}"
-                   onclick="return confirm('Deseja excluir?')">Excluir</a>
+                <a th:href="@{'/cadastroCliente/excluir/' + ${c.idCliente}}"
+                   onclick="return confirm('Tem certeza que deseja excluir este cliente?');"
+                   class="btn-excluir">Excluir</a>
             </td>
         </tr>
         </tbody>

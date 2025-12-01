@@ -21,9 +21,12 @@
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
-            </li></li>
+            </li>
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
+            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
+            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
     </nav>
 </header>
@@ -32,16 +35,13 @@
 
     <h1 class="titulo">Cadastro de Pedido</h1>
 
-
     <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post">
 
-        <!-- hidden pois cod é gerado automatico para PK mas precisa ser inserido no objeto -->
         <input type="hidden" th:field="*{idPedido}"/>
-
 
         <div class="grupo">
             <label>Cliente:</label>
-            <select th:field="*{cliente.idCliente}">
+            <select th:field="*{cliente.idCliente}" required>
                 <option value="">Selecione...</option>
                 <option th:each="c : ${clientes}"
                         th:value="${c.idCliente}"
@@ -51,7 +51,7 @@
         </div>
 
         <label>Status:</label>
-        <input type="text" name="status" value="Aberto"/>
+        <input type="text" th:field="*{status}" placeholder="Aberto"/>
 
         <h3>Itens do Pedido</h3>
 
@@ -61,46 +61,44 @@
                 <th>Produto</th>
                 <th>Estoque</th>
                 <th>Qtd</th>
-                <th>Valor</th>
+                <th>Valor Unit.</th>
                 <th></th>
             </tr>
             </thead>
 
             <tbody id="tabelaItens">
 
-            <!-- ajuste para primeiro item default que não estava buscando estoque e valor -->
             <tr th:each="item, iter : *{itens}">
-
-
                 <td>
                     <select class="produtoSelect"
                             th:name="'itens[' + ${iter.index} + '].produto.idProduto'"
-                            th:onchange="|buscarDadosProduto(this, ${iter.index})|">
-
+                            th:onchange="buscarDadosProduto(this)">
                         <option value="">Selecione...</option>
-
                         <option th:each="p : ${produtos}"
                                 th:value="${p.idProduto}"
-                                th:text="${p.nome}">
+                                th:text="${p.nome}"
+                                th:selected="${item.produto != null && item.produto.idProduto == p.idProduto}">
                         </option>
                     </select>
                 </td>
 
-
                 <td>
-                    <span th:id="'estoque_' + ${iter.index}">—</span>
+                    <span class="estoqueSpan">—</span>
                 </td>
-
 
                 <td>
                     <input type="number" min="1"
-                           th:name="'itens[' + ${iter.index} + '].quantidade'">
+                           class="qtdInput"
+                           th:name="'itens[' + ${iter.index} + '].quantidade'"
+                           th:value="${item.quantidade}"
+                           onchange="atualizarTotal()">
                 </td>
-
 
                 <td>
                     <input type="number" step="0.01" readonly
-                           th:name="'itens[' + ${iter.index} + '].valor'">
+                           class="valorItem"
+                           th:name="'itens[' + ${iter.index} + '].valor'"
+                           th:value="${item.valor}">
                 </td>
 
                 <td>
@@ -114,67 +112,74 @@
         <br>
 
         <button type="button" onclick="adicionarItem()">Adicionar Item</button>
+
+        <h3>Total do Pedido: R$ <span id="totalPedido">0.00</span></h3>
+
         <button type="submit">Salvar Pedido</button>
 
     </form>
 
 </section>
 
-
-<!-- script, usado para fazer as buscas de informações ja cadastradas na tela -->
 <script>
 
-    function buscarDadosProduto(select, index) {
+    // ==================================================
+    // BUSCA DADOS DO PRODUTO (ESTOQUE + PREÇO)
+    // ==================================================
+    function buscarDadosProduto(select) {
 
+        const row = select.closest("tr");
+        const estoqueSpan = row.querySelector(".estoqueSpan");
+        const inputValor = row.querySelector(".valorItem");
         const idProd = select.value;
-
-        const estoqueSpan = document.getElementById("estoque_" + index);
-        const inputValor = document.querySelector(`input[name="itens[${index}].valor"]`);
 
         if (!idProd) {
             estoqueSpan.textContent = "—";
             inputValor.value = "";
+            atualizarTotal();
             return;
         }
-
 
         fetch("/api/estoque/" + idProd)
             .then(r => r.json())
             .then(qtd => estoqueSpan.textContent = qtd)
             .catch(() => estoqueSpan.textContent = "erro");
 
-
         fetch("/api/produto/" + idProd)
             .then(r => r.json())
             .then(p => {
-                if (inputValor) inputValor.value = p.preco;
+                inputValor.value = p.preco;
+                atualizarTotal();
             })
             .catch(() => {
-                if (inputValor) inputValor.value = "";
+                inputValor.value = "";
+                atualizarTotal();
             });
     }
 
-
+    // ==================================================
+    // ADICIONAR ITEM
+    // ==================================================
     function adicionarItem() {
-
         const tabela = document.getElementById("tabelaItens");
-        const index = tabela.children.length;
 
         const html = `
         <tr>
             <td>
-                <select class="produtoSelect"
-                        name="itens[${index}].produto.idProduto"
-                        onchange="buscarDadosProduto(this, ${index})">
+                <select class="produtoSelect" name="novo" onchange="buscarDadosProduto(this)">
                     ${window.produtosOptionsHTML}
                 </select>
             </td>
 
-            <td><span id="estoque_${index}">—</span></td>
+            <td><span class="estoqueSpan">—</span></td>
 
-            <td><input type="number" min="1" name="itens[${index}].quantidade"></td>
+            <td>
+                <input type="number" min="1" class="qtdInput" onchange="atualizarTotal()">
+            </td>
 
-            <td><input type="number" step="0.01" name="itens[${index}].valor" readonly></td>
+            <td>
+                <input type="number" step="0.01" class="valorItem" readonly>
+            </td>
 
             <td><button type="button" onclick="removerItem(this)">X</button></td>
         </tr>
@@ -183,19 +188,61 @@
         tabela.insertAdjacentHTML("beforeend", html);
     }
 
-
+    // ==================================================
+    // REMOVER ITEM
+    // ==================================================
     function removerItem(btn) {
         btn.closest("tr").remove();
+        atualizarTotal();
     }
 
+    // ==================================================
+    // CALCULAR TOTAL
+    // ==================================================
+    function atualizarTotal() {
+        let total = 0;
 
+        document.querySelectorAll("#tabelaItens tr").forEach(tr => {
+            const qtd = tr.querySelector(".qtdInput");
+            const valor = tr.querySelector(".valorItem");
+
+            if (qtd && valor && qtd.value && valor.value) {
+                total += (parseFloat(valor.value) * parseInt(qtd.value));
+            }
+        });
+
+        document.getElementById("totalPedido").innerText = total.toFixed(2);
+    }
+
+    // ==================================================
+    // NO CARREGAR DA PÁGINA (EDIÇÃO)
+    // ==================================================
     window.addEventListener("load", function() {
+
+        // salvar opções de produto para itens novos
         const firstSelect = document.querySelector(".produtoSelect");
         if (firstSelect) {
             window.produtosOptionsHTML = firstSelect.innerHTML;
         }
+
+        // recarregar estoque e valores ao EDITAR
+        document.querySelectorAll(".produtoSelect").forEach(sel => {
+            if (sel.value) {
+                buscarDadosProduto(sel);
+            }
+        });
+
+        atualizarTotal();
     });
+
 </script>
+
+<!-- Botão excluir apenas no modo edição -->
+<div th:if="${pedido.idPedido != null}">
+    <a th:href="@{'/pedidos/excluir/' + ${pedido.idPedido}}"
+       onclick="return confirm('Excluir este pedido? O estoque será devolvido!');"
+       class="btn-excluir">Excluir Pedido</a>
+</div>
 
 </body>
 </html>

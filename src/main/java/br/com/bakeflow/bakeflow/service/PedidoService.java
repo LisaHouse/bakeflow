@@ -21,6 +21,9 @@ public class PedidoService {
         this.estoqueService = estoqueService;
     }
 
+    public Pedido findById(Long id) {
+        return repository.findByIdFetch(id);
+    }
 
     public List<Pedido> findAll() {
         return repository.findAllWithClienteAndItens();
@@ -32,10 +35,8 @@ public class PedidoService {
 
         for (Item_Pedido item : pedido.getItens()) {
 
-
             Produto p = produtoService.findById(item.getProduto().getIdProduto());
             item.setProduto(p);
-
 
             Estoque est = estoqueService.buscarPorProduto(p.getIdProduto());
             if (est == null || est.getQuantidade() < item.getQuantidade()) {
@@ -46,13 +47,13 @@ public class PedidoService {
             est.setQuantidade(est.getQuantidade() - item.getQuantidade());
             estoqueService.save(est);
 
-            // soma valor dos itens
+            // valor do item
             BigDecimal valor = p.getPreco().multiply(BigDecimal.valueOf(item.getQuantidade()));
             item.setValor(valor);
 
             total = total.add(valor);
 
-
+            // vincular ao pedido
             item.setPedido(pedido);
         }
 
@@ -60,4 +61,27 @@ public class PedidoService {
 
         return repository.save(pedido);
     }
+
+    public void delete(Long idPedido) {
+
+
+        Pedido pedido = repository.findByIdFetch(idPedido);
+        if (pedido == null) {
+            throw new RuntimeException("Pedido não encontrado.");
+        }
+
+        // devolver estoque
+        for (Item_Pedido item : pedido.getItens()) {
+
+            Estoque est = estoqueService.buscarPorProduto(item.getProduto().getIdProduto());
+
+            if (est != null) {
+                est.setQuantidade(est.getQuantidade() + item.getQuantidade());
+                estoqueService.save(est);
+            }
+        }
+
+        repository.delete(pedido);
+    }
+
 }

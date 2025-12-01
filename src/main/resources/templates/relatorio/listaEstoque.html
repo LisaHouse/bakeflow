@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Pedidos</title>
+    <title>Relatório de Estoque</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -13,6 +13,7 @@
     <nav>
         <ul>
             <li><a href="/Index">Início</a></li>
+
             <li class="cadastros-dropdown">
                 <p>Cadastros</p>
                 <ul class="submenu">
@@ -22,52 +23,55 @@
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
             </li>
-            <p>Relatórios</p>
+
+            <li><p>Relatórios</p></li>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
             <li><a href="/cadastroProduto/relatorio">Produto</a></li>
             <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+
         </ul>
     </nav>
 </header>
 
 <section class="container">
 
-    <h1 class="titulo">Pedidos Registrados</h1>
+    <h1 class="titulo">Estoque de Produtos</h1>
 
-    <a href="/pedidos/novo" class="btn-cadastrar">Novo Pedido</a>
+    <a href="/cadastroEstoque" class="btn-cadastrar">Adicionar Estoque</a>
 
-    <table class="tabela-itens">
+    <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}"></div>
+    <div th:if="${erro}" class="mensagem-erro" th:text="${erro}"></div>
+
+    <table class="tabela-lista">
         <thead>
         <tr>
-            <th>Código</th>
-            <th>quantidade</th>
-            <th>Total</th>
-            <th>Itens</th>
+            <th>ID</th>
+            <th>Produto</th>
+            <th>Quantidade</th>
             <th>Ações</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="p : ${pedidos}">
-            <td th:text="${p.idPedido}"></td>
-            <td th:text="${p.cliente.nome}"></td>
-            <td th:text="${p.valorTotal}"></td>
+        <tr th:each="e : ${lista}">
+            <td th:text="${e.idEstoque}"></td>
+            <td th:text="${e.produto.nome}"></td>
+            <td th:text="${e.quantidade}"></td>
 
             <td>
-                <ul>
-                    <li th:each="i : ${p.itens}">
-                        <span th:text="${i.produto.nome}"></span>
-                        (<span th:text="${i.quantidade}"></span>)
-                    </li>
-                </ul>
+                <a class="btn-editar"
+                   th:href="@{'/cadastroEstoque/editar/' + ${e.idEstoque}}">
+                    Editar
+                </a>
+
+                <a class="btn-excluir"
+                   th:href="@{'/cadastroEstoque/excluir/' + ${e.idEstoque}}"
+                   onclick="return confirm('Deseja realmente excluir este registro de estoque?');">
+                    Excluir
+                </a>
             </td>
 
-            <td>
-                <a th:href="@{'/pedidos/editar/' + ${p.idPedido}}">Editar</a>
-                <a th:href="@{'/pedidos/excluir/' + ${p.idPedido}}"
-                   onclick="return confirm('Deseja excluir?')">Excluir</a>
-            </td>
         </tr>
         </tbody>
     </table>

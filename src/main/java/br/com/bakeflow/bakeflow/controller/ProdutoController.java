@@ -1,17 +1,13 @@
 package br.com.bakeflow.bakeflow.controller;
 
-import br.com.bakeflow.bakeflow.model.Estoque;
 import br.com.bakeflow.bakeflow.model.Produto;
 import br.com.bakeflow.bakeflow.service.ProdutoService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -23,28 +19,62 @@ public class ProdutoController {
 
     @GetMapping
     public String novo(Model model) {
-        model.addAttribute("produto", new Produto());
+        if (!model.containsAttribute("produto")) {
+            model.addAttribute("produto", new Produto());
+        }
         return "cadastroProduto";
     }
 
     @GetMapping("/relatorio")
     public String listar(Model model) {
-        model.addAttribute("produto", produtoService.findAll());
+        model.addAttribute("produtos", produtoService.findAll());
         return "relatorio/listaProduto";
     }
 
     @PostMapping
-    public String salvar(@Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
+    public String salvar(@Valid @ModelAttribute Produto produto,
+                         BindingResult result,
+                         RedirectAttributes attr) {
+
+        boolean editando = (produto.getIdProduto() != null);
 
         if (result.hasErrors()) {
-            attributes.addFlashAttribute("org.springframework.validation.BindingResult.produto", result);
-            attributes.addFlashAttribute("produto", produto);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.produto", result);
+            attr.addFlashAttribute("produto", produto);
             return "redirect:/cadastroProduto";
         }
 
         produtoService.save(produto);
 
-        attributes.addFlashAttribute("mensagem", "Produto cadastrado com sucesso!");
+        attr.addFlashAttribute("mensagem",
+                editando ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
+
         return "redirect:/cadastroProduto";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+
+        Produto produto = produtoService.findById(id);
+        if (produto == null) {
+            return "redirect:/cadastroProduto/relatorio";
+        }
+
+        model.addAttribute("produto", produto);
+        return "cadastroProduto";
+    }
+
+    @GetMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id, RedirectAttributes attr) {
+
+        try {
+            produtoService.delete(id);
+            attr.addFlashAttribute("mensagem", "Produto excluído com sucesso!");
+
+        } catch (RuntimeException ex) {
+            attr.addFlashAttribute("erro", ex.getMessage());
+        }
+
+        return "redirect:/cadastroProduto/relatorio";
     }
 }

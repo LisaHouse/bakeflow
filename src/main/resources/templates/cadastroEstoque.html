@@ -21,10 +21,10 @@
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
-            </li></li>
+            </li>
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
             <li><a href="/cadastroProduto/relatorio">Produto</a></li>
             <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
@@ -37,32 +37,35 @@
 
     <div class="principal">
 
-
-        <div th:if="${mensagem}" class="alert alert-success">
-            <p th:text="${mensagem}"></p>
-        </div>
-
+        <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}"></div>
+        <div th:if="${erro}" class="mensagem-erro" th:text="${erro}"></div>
 
         <form th:action="@{/cadastroEstoque}" th:object="${estoque}" method="post">
 
 
+            <input type="hidden" th:field="*{idEstoque}" />
+
             <div class="grupo">
                 <label>Quantidade: <span class="obrigatorio">*</span></label>
-                <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade">
+                <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade" required>
                 <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
             </div>
-
 
             <div class="grupo">
                 <label>Produto: <span class="obrigatorio">*</span></label>
 
-                <select th:field="*{produto.idProduto}">
+                <select th:field="*{produto.idProduto}"
+                        th:disabled="${estoque.idEstoque != null}">
                     <option value="">Selecione um produto</option>
                     <option th:each="p : ${produtos}"
                             th:value="${p.idProduto}"
-                            th:text="${p.nome}">
+                            th:text="${p.nome}"
+                            th:selected="${estoque.produto != null} ? ${p.idProduto} == ${estoque.produto.idProduto} : false">
                     </option>
                 </select>
+
+
+                <input type="hidden" th:if="${estoque.idEstoque != null}" th:field="*{produto.idProduto}" />
 
                 <small th:if="${#fields.hasErrors('produto.idProduto')}" th:errors="*{produto.idProduto}" class="erro"></small>
             </div>
@@ -70,6 +73,15 @@
             <button type="submit" class="btn-cadastrar">
                 <span th:text="${estoque.idEstoque != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
+
+
+            <div th:if="${estoque.idEstoque != null}">
+                <a th:href="@{'/cadastroEstoque/excluir/' + ${estoque.idEstoque}}"
+                   onclick="return confirm('Deseja realmente excluir este registro de estoque?');"
+                   class="btn-excluir">
+                    Excluir
+                </a>
+            </div>
 
         </form>
 

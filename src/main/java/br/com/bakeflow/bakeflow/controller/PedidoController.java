@@ -32,42 +32,67 @@ public class PedidoController {
         this.produtoService = produtoService;
     }
 
-    // lista pedidos com excluir ou alterar
+    // RELATÓRIO
     @GetMapping("/relatorio")
     public String listar(Model model) {
         model.addAttribute("pedidos", pedidoService.findAll());
         return "relatorio/listaPedido";
     }
 
-    // incluir pedido
+    // NOVO PEDIDO
     @GetMapping("/novo")
-    public String novo(Model model) {
+    public String novoPedido(Model model) {
 
-        Pedido pedido = new Pedido();
+        if (!model.containsAttribute("pedido")) {
+            Pedido p = new Pedido();
+            p.setStatus("Aberto"); // ← PADRÃO
+            p.adicionarItemVazio();
+            model.addAttribute("pedido", p);
+        }
 
+        model.addAttribute("clientes", clienteService.findAll());
+        model.addAttribute("produtos", produtoService.findAll());
 
-        pedido.getItens().add(new Item_Pedido());
+        return "cadastroPedido";
+    }
+
+    // EDITAR PEDIDO
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model, RedirectAttributes attributes) {
+
+        Pedido pedido = pedidoService.findById(id);
+
+        if (pedido == null) {
+            attributes.addFlashAttribute("erro", "Pedido não encontrado.");
+            return "redirect:/pedidos/relatorio";
+        }
+
+        // se o pedido não tiver itens → adiciona um vazio
+        if (pedido.getItens().isEmpty()) {
+            pedido.adicionarItemVazio();
+        }
 
         model.addAttribute("pedido", pedido);
         model.addAttribute("clientes", clienteService.findAll());
         model.addAttribute("produtos", produtoService.findAll());
 
-        return "pedido/form";
+        return "cadastroPedido";
     }
 
-    // salvar pedido
+    // SALVAR (novo ou edição)
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Pedido pedido,
                          BindingResult result,
                          RedirectAttributes attributes,
                          Model model) {
 
-        //ajuste da data do pedido
+        boolean editando = pedido.getIdPedido() != null;
+
         if (pedido.getDataAtualizacao() == null) {
             pedido.setDataAtualizacao(new Date());
         }
 
-        //tratamento de inserir pedido sem produto selecionado
+        // Remover itens vazios
         Iterator<Item_Pedido> it = pedido.getItens().iterator();
         while (it.hasNext()) {
             Item_Pedido item = it.next();
@@ -78,35 +103,55 @@ public class PedidoController {
                     item.getQuantidade() <= 0) {
                 it.remove();
             } else {
-                // vincular item ↦ pedido
                 item.setPedido(pedido);
             }
         }
 
         if (pedido.getItens().isEmpty()) {
             attributes.addFlashAttribute("erro", "Adicione ao menos 1 item ao pedido.");
+            attributes.addFlashAttribute("pedido", pedido);
             return "redirect:/pedidos/novo";
         }
 
         if (result.hasErrors()) {
             attributes.addFlashAttribute("pedido", pedido);
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.pedido", result);
-            return "redirect:/pedidos/novo";
+            return editando ? "redirect:/pedidos/editar/" + pedido.getIdPedido()
+                    : "redirect:/pedidos/novo";
         }
 
-        //busca cliente
+        // vincular cliente completo
         Cliente c = clienteService.findById(pedido.getCliente().getIdCliente());
         pedido.setCliente(c);
 
-        //salvar pedido
         try {
             pedidoService.save(pedido);
         } catch (RuntimeException e) {
             attributes.addFlashAttribute("erro", e.getMessage());
-            return "redirect:/pedidos/novo";
+            return editando ? "redirect:/pedidos/editar/" + pedido.getIdPedido()
+                    : "redirect:/pedidos/novo";
         }
 
-        attributes.addFlashAttribute("mensagem", "Pedido cadastrado com sucesso!");
-        return "redirect:/pedidos/novo";
+        attributes.addFlashAttribute("mensagem",
+                editando ? "Pedido atualizado com sucesso!"
+                        : "Pedido cadastrado com sucesso!");
+
+        return "redirect:/pedidos/relatorio";
     }
+
+
+    @GetMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id, RedirectAttributes attr) {
+
+        try {
+            pedidoService.delete(id);
+            attr.addFlashAttribute("mensagem", "Pedido excluído com sucesso!");
+        }
+        catch (RuntimeException ex) {
+            attr.addFlashAttribute("erro", ex.getMessage());
+        }
+
+        return "redirect:/pedidos/relatorio";
+    }
+
 }

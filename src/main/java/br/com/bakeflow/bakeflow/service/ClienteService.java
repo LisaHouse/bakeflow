@@ -3,6 +3,8 @@ package br.com.bakeflow.bakeflow.service;
 import br.com.bakeflow.bakeflow.model.Cliente;
 import br.com.bakeflow.bakeflow.repository.ClienteRepository;
 import br.com.bakeflow.bakeflow.repository.EnderecoRepository;
+import br.com.bakeflow.bakeflow.repository.PedidoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +12,15 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository repository;
-    public ClienteService(ClienteRepository repository) {
+    private final EnderecoRepository enderecoRepository;
+    private final PedidoRepository pedidoRepository;
+
+    public ClienteService(ClienteRepository repository,
+                          EnderecoRepository enderecoRepository,
+                          PedidoRepository pedidoRepository) {
         this.repository = repository;
+        this.enderecoRepository = enderecoRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     public List<Cliente> findAll() {
@@ -22,11 +31,46 @@ public class ClienteService {
         return repository.findById(id).orElse(null);
     }
 
+    @Transactional
     public void save(Cliente cliente) {
+
+
+        if (cliente.getIdCliente() != null) {
+            Cliente clienteBD = repository.findById(cliente.getIdCliente()).orElse(null);
+
+            if (clienteBD != null) {
+
+                cliente.getEndereco().setId(
+                        clienteBD.getEndereco().getId()
+                );
+            }
+        }
+
+        // Salvar endereço
+        enderecoRepository.save(cliente.getEndereco());
+
+        // Salva
         repository.save(cliente);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+
+
+
+    @Transactional
+    public void excluir(Long id) {
+
+        Cliente cliente = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        if (pedidoRepository.existsByClienteIdCliente(id)) {
+            throw new RuntimeException("Cliente possui pedidos e não pode ser excluído.");
+        }
+
+
+        Long idEndereco = cliente.getEndereco().getId();
+
+        repository.delete(cliente);
+        enderecoRepository.deleteById(idEndereco);
     }
+
 }

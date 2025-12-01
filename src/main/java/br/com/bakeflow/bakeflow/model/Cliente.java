@@ -1,7 +1,6 @@
 package br.com.bakeflow.bakeflow.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -29,6 +28,8 @@ public class Cliente implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
+
+
 
 
     public Long getIdCliente() {

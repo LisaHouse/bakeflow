@@ -21,10 +21,10 @@
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
-            </li></li>
+            </li>
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
             <li><a href="/cadastroProduto/relatorio">Produto</a></li>
             <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
@@ -35,7 +35,12 @@
 
     <h1 class="titulo">Pedidos Registrados</h1>
 
+    <!-- botão novo -->
     <a href="/pedidos/novo" class="btn-cadastrar">Novo Pedido</a>
+
+    <!-- mensagens -->
+    <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}"></div>
+    <div th:if="${erro}" class="mensagem-erro" th:text="${erro}"></div>
 
     <table class="tabela-itens">
         <thead>
@@ -44,6 +49,7 @@
             <th>Cliente</th>
             <th>Total</th>
             <th>Itens</th>
+            <th>Ações</th>
         </tr>
         </thead>
 
@@ -61,8 +67,18 @@
                     </li>
                 </ul>
             </td>
+
+            <td>
+                <a class="btn-editar" th:href="@{'/pedidos/editar/' + ${p.idPedido}}">Editar</a>
+                <a class="btn-excluir"
+                   th:href="@{'/pedidos/excluir/' + ${p.idPedido}}"
+                   onclick="return confirm('Tem certeza que deseja excluir? Estoque será devolvido!')">
+                    Excluir
+                </a>
+            </td>
         </tr>
         </tbody>
+
     </table>
 
 </section>

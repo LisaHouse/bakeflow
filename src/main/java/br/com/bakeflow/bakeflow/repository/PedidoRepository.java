@@ -16,4 +16,16 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
         LEFT JOIN FETCH i.produto
     """)
     List<Pedido> findAllWithClienteAndItens();
+
+    boolean existsByClienteIdCliente(Long idCliente);
+
+    @Query("""
+    SELECT p FROM Pedido p
+    LEFT JOIN FETCH p.cliente
+    LEFT JOIN FETCH p.itens i
+    LEFT JOIN FETCH i.produto
+    WHERE p.idPedido = :id
+""")
+    Pedido findByIdFetch(Long id);
+
 }

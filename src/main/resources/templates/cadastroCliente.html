@@ -4,35 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente</title>
-    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
             crossorigin="anonymous"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            function limpa_formulario_cep() {
+            function limpaCep() {
                 $("#logradouro").val("");
                 $("#bairro").val("");
                 $("#cidade").val("");
                 $("#uf").val("");
             }
 
-            $("#cep").blur(function() {
+            $("#cep").blur(function () {
                 var cep = $(this).val().replace(/\D/g, '');
 
                 if (cep !== "") {
                     var validacep = /^[0-9]{8}$/;
 
-                    if(validacep.test(cep)) {
+                    if (validacep.test(cep)) {
 
                         $("#logradouro").val("...");
                         $("#bairro").val("...");
                         $("#cidade").val("...");
                         $("#uf").val("...");
 
-                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
+                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
 
                             if (!("erro" in dados)) {
                                 $("#logradouro").val(dados.logradouro);
@@ -40,16 +41,16 @@
                                 $("#cidade").val(dados.localidade);
                                 $("#uf").val(dados.uf);
                             } else {
-                                limpa_formulario_cep();
+                                limpaCep();
                                 alert("CEP não encontrado.");
                             }
                         });
                     } else {
-                        limpa_formulario_cep();
+                        limpaCep();
                         alert("Formato de CEP inválido.");
                     }
                 } else {
-                    limpa_formulario_cep();
+                    limpaCep();
                 }
             });
         });
@@ -69,10 +70,10 @@
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
-            </li></li>
+            </li>
             <p>Relatórios</p>
             <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroProduto/relatorio">Cliente</a></li>
+            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
             <li><a href="/cadastroProduto/relatorio">Produto</a></li>
             <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
         </ul>
@@ -83,18 +84,30 @@
 
     <h1 class="titulo">CADASTRO DE CLIENTE</h1>
 
-    <div class="principal">
+    <!-- MENSAGENS DE SUCESSO -->
+    <div th:if="${mensagem}" class="alert alert-success" style="margin-bottom: 20px;">
+        <p th:text="${mensagem}"></p>
+    </div>
 
+    <!-- MENSAGENS DE ERRO -->
+    <div th:if="${erro}" class="alert alert-danger" style="margin-bottom: 20px;">
+        <p th:text="${erro}"></p>
+    </div>
+
+
+    <div class="principal">
 
         <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post">
 
+            <!-- IDs NECESSÁRIOS PARA UPDATE -->
+            <input type="hidden" th:field="*{idCliente}">
+            <input type="hidden" th:field="*{endereco.id}">
 
             <div class="grupo">
                 <label>Nome Completo: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{nome}" placeholder="Digite o nome do cliente">
                 <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
-
 
             <div class="grupo">
                 <label>Telefone: <span class="obrigatorio">*</span></label>
@@ -104,13 +117,11 @@
 
             <h3>Endereço</h3>
 
-
             <div class="grupo">
                 <label>CEP: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{endereco.cep}" id="cep" placeholder="Digite o CEP">
                 <small th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}" class="erro"></small>
             </div>
-
 
             <div class="grupo">
                 <label>Número: <span class="obrigatorio">*</span></label>
@@ -118,25 +129,24 @@
                 <small th:if="${#fields.hasErrors('endereco.numero')}" th:errors="*{endereco.numero}" class="erro"></small>
             </div>
 
-
             <div class="grupo">
                 <label>Logradouro:</label>
-                <input type="text" id="logradouro" th:value="*{endereco.logradouro}" readonly>
+                <input type="text" th:field="*{endereco.logradouro}" id="logradouro" readonly>
             </div>
 
             <div class="grupo">
                 <label>Bairro:</label>
-                <input type="text" id="bairro" th:value="*{endereco.bairro}" readonly>
+                <input type="text" th:field="*{endereco.bairro}" id="bairro" readonly>
             </div>
 
             <div class="grupo">
                 <label>Cidade:</label>
-                <input type="text" id="cidade" th:value="*{endereco.cidade}" readonly>
+                <input type="text" th:field="*{endereco.cidade}" id="cidade" readonly>
             </div>
 
             <div class="grupo">
                 <label>Estado:</label>
-                <input type="text" id="uf" th:value="*{endereco.estado}" readonly>
+                <input type="text" th:field="*{endereco.estado}" id="uf" readonly>
             </div>
 
             <button type="submit" class="btn-cadastrar">
@@ -144,6 +154,7 @@
             </button>
 
         </form>
+
     </div>
 </section>
 

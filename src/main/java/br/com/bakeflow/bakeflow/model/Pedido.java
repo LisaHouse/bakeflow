@@ -37,6 +37,15 @@ public class Pedido implements Serializable {
     private List<Item_Pedido> itens = new ArrayList<>();
 
 
+
+    public void adicionarItemVazio() {
+        Item_Pedido item = new Item_Pedido();
+        item.setPedido(this);
+        item.setQuantidade(1);    // quantidade padrão
+        item.setValor(BigDecimal.ZERO); // valor começa zerado
+        this.itens.add(item);
+    }
+
     public List<Item_Pedido> getItens() {
         return itens;
     }

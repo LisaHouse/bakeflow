@@ -14,13 +14,14 @@ public class EstoqueService {
         this.repository = repository;
     }
 
-    public List<Estoque> findAll() {
-        return repository.findAll();
+    public List<Estoque> findAllWithProduto() {
+        return repository.findAllWithProduto();
     }
 
     public Estoque findById(Long id) {
         return repository.findById(id).orElse(null);
     }
+
 
     public Estoque buscarPorProduto(Long idProduto) {
         return repository.findByProdutoIdProduto(idProduto).orElse(null);
