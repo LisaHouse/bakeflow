@@ -26,7 +26,7 @@ public class Cliente implements Serializable {
     private String nome;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id")
+    @JoinColumn(name = "endereco_id", nullable = true)
     private Endereco endereco;
 
 

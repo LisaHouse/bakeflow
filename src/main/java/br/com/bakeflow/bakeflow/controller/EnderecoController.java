@@ -1,7 +1,6 @@
 package br.com.bakeflow.bakeflow.controller;
 
 import br.com.bakeflow.bakeflow.model.Endereco;
-import br.com.bakeflow.bakeflow.service.EnderecoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -16,10 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/enderecoCliente")
 public class EnderecoController {
 
-    private final EnderecoService service;
 
-    public EnderecoController(EnderecoService service) {
-        this.service = service;
+    public EnderecoController() {
     }
 
 
@@ -42,6 +39,7 @@ public class EnderecoController {
 
 
         attributes.addFlashAttribute("mensagem", "Endereco cadastrado com sucesso!");
+        attributes.addFlashAttribute("mensagemSucesso", "Endereco cadastrado com sucesso!");
         return "redirect:/cadastroCliente";
     }
 }

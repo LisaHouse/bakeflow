@@ -64,6 +64,7 @@ public class PedidoController {
 
         if (pedido == null) {
             attributes.addFlashAttribute("erro", "Pedido não encontrado.");
+            attributes.addFlashAttribute("mensagemErro", "Pedido não encontrado.");
             return "redirect:/pedidos/relatorio";
         }
 
@@ -83,8 +84,7 @@ public class PedidoController {
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Pedido pedido,
                          BindingResult result,
-                         RedirectAttributes attributes,
-                         Model model) {
+                         RedirectAttributes attributes) {
 
         boolean editando = pedido.getIdPedido() != null;
 
@@ -109,6 +109,7 @@ public class PedidoController {
 
         if (pedido.getItens().isEmpty()) {
             attributes.addFlashAttribute("erro", "Adicione ao menos 1 item ao pedido.");
+            attributes.addFlashAttribute("mensagemErro", "Adicione ao menos 1 item ao pedido.");
             attributes.addFlashAttribute("pedido", pedido);
             return "redirect:/pedidos/novo";
         }
@@ -128,6 +129,7 @@ public class PedidoController {
             pedidoService.save(pedido);
         } catch (RuntimeException e) {
             attributes.addFlashAttribute("erro", e.getMessage());
+            attributes.addFlashAttribute("mensagemErro", e.getMessage());
             return editando ? "redirect:/pedidos/editar/" + pedido.getIdPedido()
                     : "redirect:/pedidos/novo";
         }
@@ -135,6 +137,8 @@ public class PedidoController {
         attributes.addFlashAttribute("mensagem",
                 editando ? "Pedido atualizado com sucesso!"
                         : "Pedido cadastrado com sucesso!");
+        attributes.addFlashAttribute("mensagemSucesso",
+                editando ? "Pedido atualizado com sucesso!" : "Pedido cadastrado com sucesso!");
 
         return "redirect:/pedidos/relatorio";
     }
@@ -146,9 +150,11 @@ public class PedidoController {
         try {
             pedidoService.delete(id);
             attr.addFlashAttribute("mensagem", "Pedido excluído com sucesso!");
+            attr.addFlashAttribute("mensagemSucesso", "Pedido excluído com sucesso!");
         }
         catch (RuntimeException ex) {
             attr.addFlashAttribute("erro", ex.getMessage());
+            attr.addFlashAttribute("mensagemErro", ex.getMessage());
         }
 
         return "redirect:/pedidos/relatorio";

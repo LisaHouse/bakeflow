@@ -47,7 +47,8 @@ public class ClienteService {
         }
 
         // Salvar endereço
-        enderecoRepository.save(cliente.getEndereco());
+        var enderecoSalvo = enderecoRepository.save(cliente.getEndereco());
+        cliente.setEndereco(enderecoSalvo);
 
         // Salva
         repository.save(cliente);

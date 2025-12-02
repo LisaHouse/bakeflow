@@ -68,6 +68,7 @@ public class EstoqueController {
 
         if (estoque.getProduto() == null || estoque.getProduto().getIdProduto() == null) {
             attr.addFlashAttribute("erro", "Selecione um produto!");
+            attr.addFlashAttribute("mensagemErro", "Selecione um produto!");
             return "redirect:/cadastroEstoque";
         }
 
@@ -86,6 +87,7 @@ public class EstoqueController {
                 estoqueService.save(existente);
 
                 attr.addFlashAttribute("mensagem", "Estoque atualizado com sucesso!");
+                attr.addFlashAttribute("mensagemSucesso", "Estoque atualizado com sucesso!");
             }
 
             return "redirect:/cadastroEstoque/relatorio";
@@ -96,11 +98,13 @@ public class EstoqueController {
 
         if (estoqueExistente != null) {
             attr.addFlashAttribute("erro", "Já existe estoque cadastrado para este produto!");
+            attr.addFlashAttribute("mensagemErro", "Já existe estoque cadastrado para este produto!");
             return "redirect:/cadastroEstoque";
         }
 
         estoqueService.save(estoque);
         attr.addFlashAttribute("mensagem", "Estoque cadastrado com sucesso!");
+        attr.addFlashAttribute("mensagemSucesso", "Estoque cadastrado com sucesso!");
 
         return "redirect:/cadastroEstoque";
     }
@@ -111,8 +115,10 @@ public class EstoqueController {
         try {
             estoqueService.delete(id);
             attr.addFlashAttribute("mensagem", "Estoque excluído com sucesso!");
+            attr.addFlashAttribute("mensagemSucesso", "Estoque excluído com sucesso!");
         } catch (Exception e) {
             attr.addFlashAttribute("erro", "Erro ao excluir: " + e.getMessage());
+            attr.addFlashAttribute("mensagemErro", "Erro ao excluir: " + e.getMessage());
         }
 
         return "redirect:/cadastroEstoque/relatorio";

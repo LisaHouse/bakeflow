@@ -10,6 +10,9 @@
 
 <body>
 
+<!-- Include flash fragment to show success/error popup -->
+<div th:insert="fragments/flash :: flash"></div>
+
 <!-- MENU SUPERIOR -->
 <header class="navbar">
     <ul>
@@ -175,7 +178,18 @@
             $("#bairro").val("");
             $("#cidade").val("");
             $("#uf").val("");
+
+            setEnderecoRequired(false);
         }
+
+        function setEnderecoRequired(flag) {
+            $("#logradouro, #bairro, #cidade, #uf").prop('required', !!flag);
+        }
+
+        $("#logradouro").prop('required', $.trim($("#logradouro").val()) !== "");
+        $("#bairro").prop('required', $.trim($("#bairro").val()) !== "");
+        $("#cidade").prop('required', $.trim($("#cidade").val()) !== "");
+        $("#uf").prop('required', $.trim($("#uf").val()) !== "");
 
         $("#cep").blur(function () {
             var cep = $(this).val().replace(/\D/g, '');
@@ -193,10 +207,16 @@
                     $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
 
                         if (!("erro" in dados)) {
-                            $("#logradouro").val(dados.logradouro);
-                            $("#bairro").val(dados.bairro);
-                            $("#cidade").val(dados.localidade);
-                            $("#uf").val(dados.uf);
+                            $("#logradouro").val(dados.logradouro || "");
+                            $("#bairro").val(dados.bairro || "");
+                            $("#cidade").val(dados.localidade || "");
+                            $("#uf").val(dados.uf || "");
+
+                            // Make each address field required only if ViaCEP returned a non-empty value for it
+                            $("#logradouro").prop('required', $.trim(dados.logradouro || "") !== "");
+                            $("#bairro").prop('required', $.trim(dados.bairro || "") !== "");
+                            $("#cidade").prop('required', $.trim(dados.localidade || "") !== "");
+                            $("#uf").prop('required', $.trim(dados.uf || "") !== "");
                         } else {
                             limpaCep();
                             alert("CEP não encontrado.");

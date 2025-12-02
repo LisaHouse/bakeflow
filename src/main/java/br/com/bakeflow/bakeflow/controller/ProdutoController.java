@@ -48,6 +48,9 @@ public class ProdutoController {
 
         attr.addFlashAttribute("mensagem",
                 editando ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
+        // also set standardized key for popup
+        attr.addFlashAttribute("mensagemSucesso",
+                editando ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
 
         return "redirect:/cadastroProduto";
     }
@@ -70,9 +73,11 @@ public class ProdutoController {
         try {
             produtoService.delete(id);
             attr.addFlashAttribute("mensagem", "Produto excluído com sucesso!");
+            attr.addFlashAttribute("mensagemSucesso", "Produto excluído com sucesso!");
 
         } catch (RuntimeException ex) {
             attr.addFlashAttribute("erro", ex.getMessage());
+            attr.addFlashAttribute("mensagemErro", ex.getMessage());
         }
 
         return "redirect:/cadastroProduto/relatorio";

@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<div th:insert="fragments/flash :: flash"></div>
+
 <!-- MENU SUPERIOR -->
 <header class="navbar">
     <ul>
@@ -63,15 +65,15 @@
 
             <!-- NOME DO PRODUTO -->
             <div class="grupo">
-                <label>Nome Produto: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto" required>
+                <label for="nomeProduto">Nome Produto: <span class="obrigatorio">*</span></label>
+                <input type="text" id="nomeProduto" th:field="*{nome}" placeholder="Digite o nome do produto" required>
                 <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
             <!-- PREÇO -->
             <div class="grupo">
-                <label>Preço: <span class="obrigatorio">*</span></label>
-                <input type="number" th:field="*{preco}" step="0.01" min="0.01" placeholder="Digite o preço do produto" required>
+                <label for="precoProduto">Preço: <span class="obrigatorio">*</span></label>
+                <input type="number" id="precoProduto" th:field="*{preco}" step="0.01" min="0.01" placeholder="Digite o preço do produto" required>
                 <small th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}" class="erro"></small>
             </div>
 

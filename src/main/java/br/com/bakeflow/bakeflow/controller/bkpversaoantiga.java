@@ -31,11 +31,13 @@ public class bkpversaoantiga {
     public String form(@Valid Pedido pedido, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute("mensagem", "Verifique os campos...");
+            attributes.addFlashAttribute("mensagemErro", "Verifique os campos...");
             return "redirect:/cadastrarPedido";
         }
 
         pedidoRepository.save(pedido);
         attributes.addFlashAttribute("mensagem", "Pedido cadastrado com sucesso!");
+        attributes.addFlashAttribute("mensagemSucesso", "Pedido cadastrado com sucesso!");
         return "redirect:/cadastrarPedido";
     }
 }

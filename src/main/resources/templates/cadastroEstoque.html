@@ -8,8 +8,9 @@
     <!-- MESMOS CSS DA TELA CLIENTE -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
+
+<div th:insert="fragments/flash :: flash"></div>
 
 <!-- MENU SUPERIOR -->
 <header class="navbar">
@@ -78,15 +79,15 @@
 
             <!-- Quantidade -->
             <div class="grupo">
-                <label>Quantidade: <span class="obrigatorio">*</span></label>
-                <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade">
+                <label for="quantidade">Quantidade: <span class="obrigatorio">*</span></label>
+                <input type="number" id="quantidade" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade">
                 <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
             </div>
 
             <!-- Produto -->
             <div class="grupo">
-                <label>Produto: <span class="obrigatorio">*</span></label>
-                <select th:field="*{produto.idProduto}" th:disabled="${estoque.idEstoque != null}">
+                <label for="produtoSelect">Produto: <span class="obrigatorio">*</span></label>
+                <select id="produtoSelect" th:field="*{produto.idProduto}" th:disabled="${estoque.idEstoque != null}">
                     <option value="">Selecione um produto</option>
                     <option th:each="p : ${produtos}" th:value="${p.idProduto}" th:text="${p.nome}"
                             th:selected="${estoque.idEstoque != null and estoque.produto.idProduto == p.idProduto}">
