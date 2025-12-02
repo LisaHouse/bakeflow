@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BakeFlow - Gestão para Confeitaria</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
@@ -45,13 +45,11 @@
             controlar estoque e gerenciar sua produção<br>
             de forma simples e eficiente.
         </p>
-        <p class="chamada-acao">Cadastre seu negócio clicando aqui:</p>
-        <a href="/pedidos/novo" class="btn-cadastrar">CADASTRAR</a>
+        <p class="chamada-acao">Cadastre seu pedido clicando aqui:</p>
+        <a href="/pedidos/novo" class="btn-cadastrar" style="margin-top:24px; display:inline-block;">CADASTRAR</a>
     </div>
 
-    <div class="hero-image">
-        <img src="/img/doces.jpg" alt="Doces artesanais">
-    </div>
+
 </section>
 
 <!-- RODAPÉ -->

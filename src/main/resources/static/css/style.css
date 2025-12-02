@@ -120,13 +120,16 @@ body {
    HERO / LAYOUT PRINCIPAL
 ========================================= */
 .hero-container {
+    /* Center the hero block in the viewport */
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: center;            /* vertical centering of children */
+    justify-content: center;        /* horizontal centering of children */
+    flex-direction: column;         /* stack hero content vertically and keep it centered */
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 40px auto;              /* add vertical spacing from header/footer */
     padding: 40px 5%;
-    min-height: 80vh;
+    /* occupy most of the viewport so the hero appears centered on the screen */
+    min-height: calc(100vh - 160px);
     gap: 40px;
 }
 
@@ -225,6 +228,11 @@ body {
 .hero-content {
     flex: 1;
     max-width: 500px;
+    text-align: center; /* center text when hero is centered */
+    display: flex; /* ensure predictable vertical spacing */
+    flex-direction: column;
+    align-items: center;
+    gap: 12px; /* consistent spacing between description, chamada and button */
 }
 
 .logo-texto {
@@ -242,17 +250,23 @@ body {
     margin-bottom: 30px;
 }
 
-.descricao {
+.hero-content .descricao {
     font-size: 1rem;
     line-height: 1.6;
     color: var(--cor-texto-corpo);
-    margin-bottom: 40px;
+    margin: 0; /* let flex gap control spacing */
     max-width: 400px;
 }
 
 .chamada-acao {
     font-weight: 600;
     margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.hero-content .chamada-acao {
+    font-weight: 600;
+    margin: 0; /* let flex gap control spacing */
     font-size: 1.1rem;
 }
 
@@ -269,6 +283,17 @@ body {
     cursor: pointer;
     box-shadow: 0 10px 20px var(--btn-sombra);
     transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block; /* ensure vertical margins apply and allow padding */
+}
+
+.hero-content .btn-cadastrar {
+    margin-top: 20px; /* visible gap controlled by flex + margin for extra space */
+}
+
+/* High-specificity fallback: force spacing if other rules override */
+section.hero-container .hero-content > .btn-cadastrar {
+    margin-top: 24px !important;
+    display: inline-block !important;
 }
 
 .btn-cadastrar:hover {
