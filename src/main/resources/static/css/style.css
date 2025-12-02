@@ -143,6 +143,84 @@ body {
     gap: 20px;
 }
 
+/* Form layout helpers */
+.cadastro-container .grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cadastro-container label {
+    font-weight: 600;
+    color: #4a2c2a;
+    font-size: 0.95rem;
+}
+
+.cadastro-container input[type="text"],
+.cadastro-container input[type="number"],
+.cadastro-container textarea,
+.cadastro-container select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e6d8d8;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #333;
+    background: #fff;
+}
+
+.cadastro-container input[readonly] {
+    background: #f7f7f7;
+    color: #666;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row .col {
+    flex: 1;
+}
+
+.form-row .col.col-2 {
+    flex: 2;
+}
+
+/* buttons and helpers */
+.btn-excluir {
+    display: inline-block;
+    padding: 10px 30px;
+    background-color: #ff6b6b;
+    color: #fff;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-excluir:hover {
+    background-color: #ff4c4c;
+}
+
+.small.erro, .erro {
+    color: #c0392b;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.obrigatorio {
+    color: #c0392b;
+    font-weight: 700;
+    margin-left: 3px;
+}
+
+/* Responsive: stack form columns on small screens */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+}
 
 .hero-content {
     flex: 1;
@@ -214,7 +292,3 @@ body {
     border: 4px solid #fff;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
-
-
-
-
