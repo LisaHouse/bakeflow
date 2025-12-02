@@ -18,11 +18,11 @@ public class Endereco implements Serializable {
     private Long endereco_id;
 
     @Column(name = "cep")
-    @NotEmpty
+    @NotEmpty(message = "Campo obrigatório")
     private String cep;
 
     @Column(name = "numero")
-    @NotEmpty
+    @NotEmpty(message = "Campo obrigatório")
     private String numero;
 
     @Transient

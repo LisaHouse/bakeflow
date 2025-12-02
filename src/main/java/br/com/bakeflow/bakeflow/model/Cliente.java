@@ -18,11 +18,11 @@ public class Cliente implements Serializable {
     private Long idCliente;
 
     @Column(name = "telefone", nullable = false, length = 100)
-    @NotEmpty
+    @NotEmpty(message = "Campo obrigatório")
     private String telefone;
 
     @Column(name = "nome", nullable = false, length = 100)
-    @NotEmpty
+    @NotEmpty(message = "Campo obrigatório")
     private String nome;
 
     @OneToOne(cascade = CascadeType.ALL)

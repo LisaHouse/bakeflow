@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -56,50 +58,72 @@
         });
     </script>
 </head>
+
 <body>
 
+<!-- MENU SUPERIOR (MESMO DA HOME) -->
 <header class="menu-superior">
     <nav>
-        <ul>
+        <ul class="menu">
+
             <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
+
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Cadastros</a>
+
+                <ul class="dropdown-content">
                     <li><a href="/cadastroCliente">Cliente</a></li>
                     <li><a href="/cadastroProduto">Produto</a></li>
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
             </li>
-            <p>Relatórios</p>
-            <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
-            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
-            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Relatórios</a>
+
+                <ul class="dropdown-content">
+                    <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                    <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                    <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                    <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                </ul>
+            </li>
+
         </ul>
     </nav>
 </header>
 
-<section class="container">
+<!-- CONTAINER CENTRAL PADRONIZADO -->
+<section class="hero" style="flex-direction: column; padding: 60px 40px; gap: 30px;">
 
-    <h1 class="titulo">CADASTRO DE CLIENTE</h1>
-
-    <!-- MENSAGENS DE SUCESSO -->
-    <div th:if="${mensagem}" class="alert alert-success" style="margin-bottom: 20px;">
-        <p th:text="${mensagem}"></p>
+    <div class="hero-texto" style="text-align: center;">
+        <h1 class="titulo">Cadastro de Cliente</h1>
+        <h2 class="subtitulo">Preencha os dados para cadastrar um novo cliente</h2>
     </div>
 
-    <!-- MENSAGENS DE ERRO -->
-    <div th:if="${erro}" class="alert alert-danger" style="margin-bottom: 20px;">
-        <p th:text="${erro}"></p>
-    </div>
+    <!-- CAIXA BRANCA COM SOMBRA (PADRÃO HOME) -->
+    <div style="
+        background: white;
+        width: 100%;
+        max-width: 650px;
+        padding: 40px;
+        border-radius: 18px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.20);
+    ">
 
+        <!-- ALERTAS -->
+        <div th:if="${mensagem}" class="alert alert-success" style="margin-bottom: 20px;">
+            <p th:text="${mensagem}"></p>
+        </div>
 
-    <div class="principal">
+        <div th:if="${erro}" class="alert alert-danger" style="margin-bottom: 20px;">
+            <p th:text="${erro}"></p>
+        </div>
 
+        <!-- FORMULÁRIO -->
         <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post">
 
-            <!-- IDs NECESSÁRIOS PARA UPDATE -->
             <input type="hidden" th:field="*{idCliente}">
             <input type="hidden" th:field="*{endereco.id}">
 
@@ -115,18 +139,16 @@
                 <small th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="erro"></small>
             </div>
 
-            <h3>Endereço</h3>
+            <h3 style="margin-top: 30px; color:#5a345a;">Endereço</h3>
 
             <div class="grupo">
                 <label>CEP: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{endereco.cep}" id="cep" placeholder="Digite o CEP">
-                <small th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}" class="erro"></small>
             </div>
 
             <div class="grupo">
                 <label>Número: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{endereco.numero}" placeholder="Nº da residência">
-                <small th:if="${#fields.hasErrors('endereco.numero')}" th:errors="*{endereco.numero}" class="erro"></small>
             </div>
 
             <div class="grupo">
@@ -149,7 +171,7 @@
                 <input type="text" th:field="*{endereco.estado}" id="uf" readonly>
             </div>
 
-            <button type="submit" class="btn-cadastrar">
+            <button type="submit" class="btn-cadastrar" style="margin-top: 20px;">
                 <span th:text="${cliente.idCliente != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
 

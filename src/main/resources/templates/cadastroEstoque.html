@@ -4,29 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Estoque</title>
-    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+
+    <!-- MESMOS CSS DA TELA CLIENTE -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
 </head>
+
+
 
 <body>
 
 <header class="menu-superior">
     <nav>
-        <ul>
+        <ul class="menu">
+
             <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
+
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Cadastros</a>
+
+                <ul class="dropdown-content">
                     <li><a href="/cadastroCliente">Cliente</a></li>
                     <li><a href="/cadastroProduto">Produto</a></li>
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
             </li>
-            <p>Relatórios</p>
-            <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
-            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
-            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Relatórios</a>
+                <ul class="dropdown-content">
+                    <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                    <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                    <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                    <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                </ul>
+            </li>
+
         </ul>
     </nav>
 </header>
@@ -35,19 +49,25 @@
 
     <h1 class="titulo">CADASTRO DE ESTOQUE</h1>
 
-    <div class="principal">
+    <!-- MENSAGENS DE SUCESSO -->
+    <div th:if="${mensagem}" class="alert alert-success">
+        <p th:text="${mensagem}"></p>
+    </div>
 
-        <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}"></div>
-        <div th:if="${erro}" class="mensagem-erro" th:text="${erro}"></div>
+    <!-- MENSAGENS DE ERRO -->
+    <div th:if="${erro}" class="alert alert-danger">
+        <p th:text="${erro}"></p>
+    </div>
+
+    <div class="principal">
 
         <form th:action="@{/cadastroEstoque}" th:object="${estoque}" method="post">
 
-
-            <input type="hidden" th:field="*{idEstoque}" />
+            <input type="hidden" th:field="*{idEstoque}">
 
             <div class="grupo">
                 <label>Quantidade: <span class="obrigatorio">*</span></label>
-                <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade" required>
+                <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade">
                 <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
             </div>
 
@@ -60,12 +80,12 @@
                     <option th:each="p : ${produtos}"
                             th:value="${p.idProduto}"
                             th:text="${p.nome}"
-                            th:selected="${estoque.produto != null} ? ${p.idProduto} == ${estoque.produto.idProduto} : false">
+                            th:selected="${estoque.idEstoque != null and estoque.produto.idProduto == p.idProduto}">
                     </option>
                 </select>
 
-
-                <input type="hidden" th:if="${estoque.idEstoque != null}" th:field="*{produto.idProduto}" />
+                <!-- manter idProduto no update -->
+                <input type="hidden" th:if="${estoque.idEstoque != null}" th:field="*{produto.idProduto}">
 
                 <small th:if="${#fields.hasErrors('produto.idProduto')}" th:errors="*{produto.idProduto}" class="erro"></small>
             </div>
@@ -74,10 +94,9 @@
                 <span th:text="${estoque.idEstoque != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
 
-
-            <div th:if="${estoque.idEstoque != null}">
+            <div th:if="${estoque.idEstoque != null}" style="margin-top: 15px;">
                 <a th:href="@{'/cadastroEstoque/excluir/' + ${estoque.idEstoque}}"
-                   onclick="return confirm('Deseja realmente excluir este registro de estoque?');"
+                   onclick="return confirm('Deseja realmente excluir este registro?');"
                    class="btn-excluir">
                     Excluir
                 </a>

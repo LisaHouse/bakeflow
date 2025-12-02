@@ -3,41 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
-    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+    <title>Home - BakeFlow</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
 </head>
+
 <body>
 
 <header class="menu-superior">
     <nav>
-        <ul>
+        <ul class="menu">
+
             <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
+
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Cadastros</a>
+                <ul class="dropdown-content">
                     <li><a href="/cadastroCliente">Cliente</a></li>
                     <li><a href="/cadastroProduto">Produto</a></li>
                     <li><a href="/cadastroEstoque">Estoque</a></li>
                     <li><a href="/pedidos/novo">Pedido</a></li>
                 </ul>
             </li>
-            <p>Relatórios</p>
-            <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
-            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
-            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Relatórios</a>
+                <ul class="dropdown-content">
+                    <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                    <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                    <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                    <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                </ul>
+            </li>
+
         </ul>
     </nav>
 </header>
 
-<section class="container">
+<!-- SEÇÃO PRINCIPAL -->
+<section class="hero">
 
-    <h1 class="titulo">PAGINA INICIAL</h1>
+    <div class="hero-texto">
+        <h1 class="titulo">BakeFlow</h1>
+        <h2 class="subtitulo">Gestão para confeitaria</h2>
 
-    <div class="principal">
-        <a th:href="@{/cadastroPedido}" class="btn">Cadastrar Cliente</a>
+        <p class="descricao">
+            Bake Flow é sua solução para organizar pedidos,<br>
+            controlar estoque e gerenciar sua produção de<br>
+            forma simples e eficiente.
+        </p>
+
+        <p class="chamada">Cadastre seu primeiro pedido aqui:</p>
+
+        <a th:href="@{/cadastroCliente}" class="btn-cadastrar">CADASTRAR</a>
     </div>
+
+    <div class="hero-imagem">
+        <img src="/img/doces.jpg" alt="Doces artesanais">
+    </div>
+
 </section>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+    <h3>BakeFlow</h3>
+    <p>Organização e controle para confeitaria.</p>
+</footer>
 
 </body>
 </html>

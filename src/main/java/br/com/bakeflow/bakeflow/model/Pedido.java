@@ -27,7 +27,7 @@ public class Pedido implements Serializable {
     private Date dataAtualizacao;
 
     @Column(name = "status", nullable = false, length = 100)
-    @NotEmpty
+    @NotEmpty(message = "Campo obrigatório")
     private String status;
 
     @Column(name = "valor_total", precision = 10, scale = 2)
