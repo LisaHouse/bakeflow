@@ -1,74 +1,63 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - BakeFlow</title>
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-
+    <title>BakeFlow - Gestão para Confeitaria</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<header class="menu-superior">
-    <nav>
-        <ul class="menu">
+<!-- MENU SUPERIOR -->
+<nav class="navbar">
+    <ul>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastro</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/cadastroFornecedor">Fornecedor</a></li>
+            </ul>
+        </li>
 
-            <li><a href="/Index">Início</a></li>
-
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Cadastros</a>
-                <ul class="dropdown-content">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Relatórios</a>
-                <ul class="dropdown-content">
-                    <li><a href="/pedidos/relatorio">Pedidos</a></li>
-                    <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
-                    <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
-                    <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
-                </ul>
-            </li>
-
-        </ul>
-    </nav>
-</header>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatório</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                <li><a href="/cadastroFornecedor/relatorio">Fornecedores</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
 
 <!-- SEÇÃO PRINCIPAL -->
-<section class="hero">
-
-    <div class="hero-texto">
-        <h1 class="titulo">BakeFlow</h1>
-        <h2 class="subtitulo">Gestão para confeitaria</h2>
-
+<section class="hero-container">
+    <div class="hero-content">
+        <h1 class="logo-texto">BakeFlow</h1>
+        <h2 class="subtitulo-cursive">Gestão para confeitaria</h2>
         <p class="descricao">
-            Bake Flow é sua solução para organizar pedidos,<br>
-            controlar estoque e gerenciar sua produção de<br>
-            forma simples e eficiente.
+            BakeFlow é sua solução para organizar pedidos,<br>
+            controlar estoque e gerenciar sua produção<br>
+            de forma simples e eficiente.
         </p>
-
-        <p class="chamada">Cadastre seu primeiro pedido aqui:</p>
-
-        <a th:href="@{/cadastroCliente}" class="btn-cadastrar">CADASTRAR</a>
+        <p class="chamada-acao">Cadastre seu negócio clicando aqui:</p>
+        <a href="/pedidos/novo" class="btn-cadastrar">CADASTRAR</a>
     </div>
 
-    <div class="hero-imagem">
+    <div class="hero-image">
         <img src="/img/doces.jpg" alt="Doces artesanais">
     </div>
-
 </section>
 
 <!-- RODAPÉ -->
 <footer class="rodape">
     <h3>BakeFlow</h3>
-    <p>Organização e controle para confeitaria.</p>
+    <p>Um sistema de gestão para microempreendedor do ramo alimentício</p>
 </footer>
 
 </body>

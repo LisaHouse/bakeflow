@@ -3,39 +3,130 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Estoque</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 25px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .titulo {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #4a2c2a;
+            margin-bottom: 30px;
+        }
+
+        .btn-cadastrar {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 30px;
+            background-color: #a67c80;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-cadastrar:hover {
+            background-color: #925d65;
+        }
+
+        .btn-editar, .btn-excluir {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        .btn-editar {
+            background-color: #4a90e2;
+        }
+        .btn-editar:hover {
+            background-color: #357ab8;
+        }
+        .btn-excluir {
+            background-color: #ff6b6b;
+        }
+        .btn-excluir:hover {
+            background-color: #ff4c4c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #a67c80;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        tr:hover {
+            background-color: #f1e6e6;
+        }
+
+        .mensagem-sucesso {
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .mensagem-erro {
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
 
-<header class="menu-superior">
-    <nav>
-        <ul>
-            <li><a href="/Index">Início</a></li>
+<header class="navbar">
+    <ul>
+        <li><a href="/Index" class="dropbtn">Início</a></li>
 
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastros</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+            </ul>
+        </li>
 
-            <li><p>Relatórios</p></li>
-            <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
-            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
-            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
-
-        </ul>
-    </nav>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatórios</a>
+            <ul class="dropdown-content">
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+            </ul>
+        </li>
+    </ul>
 </header>
 
 <section class="container">
-
     <h1 class="titulo">Estoque de Produtos</h1>
 
     <a href="/cadastroEstoque" class="btn-cadastrar">Adicionar Estoque</a>
@@ -43,7 +134,7 @@
     <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}"></div>
     <div th:if="${erro}" class="mensagem-erro" th:text="${erro}"></div>
 
-    <table class="tabela-lista">
+    <table>
         <thead>
         <tr>
             <th>ID</th>
@@ -52,30 +143,19 @@
             <th>Ações</th>
         </tr>
         </thead>
-
         <tbody>
         <tr th:each="e : ${lista}">
             <td th:text="${e.idEstoque}"></td>
             <td th:text="${e.produto.nome}"></td>
             <td th:text="${e.quantidade}"></td>
-
             <td>
-                <a class="btn-editar"
-                   th:href="@{'/cadastroEstoque/editar/' + ${e.idEstoque}}">
-                    Editar
-                </a>
-
-                <a class="btn-excluir"
-                   th:href="@{'/cadastroEstoque/excluir/' + ${e.idEstoque}}"
-                   onclick="return confirm('Deseja realmente excluir este registro de estoque?');">
-                    Excluir
-                </a>
+                <a class="btn-editar" th:href="@{'/cadastroEstoque/editar/' + ${e.idEstoque}}">Editar</a>
+                <a class="btn-excluir" th:href="@{'/cadastroEstoque/excluir/' + ${e.idEstoque}}"
+                   onclick="return confirm('Deseja realmente excluir este registro de estoque?');">Excluir</a>
             </td>
-
         </tr>
         </tbody>
     </table>
-
 </section>
 
 </body>

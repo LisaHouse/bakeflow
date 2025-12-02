@@ -7,103 +7,131 @@
 
     <!-- MESMOS CSS DA TELA CLIENTE -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
-
 </head>
-
-
 
 <body>
 
-<header class="menu-superior">
-    <nav>
-        <ul class="menu">
+<!-- MENU SUPERIOR -->
+<header class="navbar">
+    <ul>
+        <li><a href="/Index" class="dropbtn">Início</a></li>
 
-            <li><a href="/Index">Início</a></li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastros</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+            </ul>
+        </li>
 
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Cadastros</a>
-
-                <ul class="dropdown-content">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Relatórios</a>
-                <ul class="dropdown-content">
-                    <li><a href="/pedidos/relatorio">Pedidos</a></li>
-                    <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
-                    <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
-                    <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
-                </ul>
-            </li>
-
-        </ul>
-    </nav>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatórios</a>
+            <ul class="dropdown-content">
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+            </ul>
+        </li>
+    </ul>
 </header>
 
-<section class="container">
-
-    <h1 class="titulo">CADASTRO DE ESTOQUE</h1>
-
-    <!-- MENSAGENS DE SUCESSO -->
-    <div th:if="${mensagem}" class="alert alert-success">
-        <p th:text="${mensagem}"></p>
+<!-- CONTAINER CENTRAL -->
+<section class="hero">
+    <div class="hero-texto" style="text-align: center; margin-bottom: 40px;">
+        <h1 class="titulo" style="font-size: 3rem; color: #4a2c2a;">Cadastro de Estoque</h1>
+        <h2 class="subtitulo" style="font-size: 1.5rem; color: #a67c80; font-weight: 500;">
+            Preencha os dados para cadastrar ou atualizar o estoque
+        </h2>
     </div>
 
-    <!-- MENSAGENS DE ERRO -->
-    <div th:if="${erro}" class="alert alert-danger">
-        <p th:text="${erro}"></p>
-    </div>
+    <!-- BOX CENTRAL -->
+    <div class="cadastro-container" style="
+        background-color: #fff;
+        width: 100%;
+        max-width: 500px;
+        padding: 40px 30px;
+        border-radius: 25px;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    ">
 
-    <div class="principal">
+        <!-- MENSAGENS DE SUCESSO -->
+        <div th:if="${mensagem}" class="alert alert-success">
+            <p th:text="${mensagem}"></p>
+        </div>
 
-        <form th:action="@{/cadastroEstoque}" th:object="${estoque}" method="post">
+        <!-- MENSAGENS DE ERRO -->
+        <div th:if="${erro}" class="alert alert-danger">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <!-- FORMULÁRIO -->
+        <form th:action="@{/cadastroEstoque}" th:object="${estoque}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
 
             <input type="hidden" th:field="*{idEstoque}">
 
+            <!-- Quantidade -->
             <div class="grupo">
                 <label>Quantidade: <span class="obrigatorio">*</span></label>
                 <input type="number" min="0" th:field="*{quantidade}" placeholder="Informe a quantidade">
                 <small th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="erro"></small>
             </div>
 
+            <!-- Produto -->
             <div class="grupo">
                 <label>Produto: <span class="obrigatorio">*</span></label>
-
-                <select th:field="*{produto.idProduto}"
-                        th:disabled="${estoque.idEstoque != null}">
+                <select th:field="*{produto.idProduto}" th:disabled="${estoque.idEstoque != null}">
                     <option value="">Selecione um produto</option>
-                    <option th:each="p : ${produtos}"
-                            th:value="${p.idProduto}"
-                            th:text="${p.nome}"
+                    <option th:each="p : ${produtos}" th:value="${p.idProduto}" th:text="${p.nome}"
                             th:selected="${estoque.idEstoque != null and estoque.produto.idProduto == p.idProduto}">
                     </option>
                 </select>
 
-                <!-- manter idProduto no update -->
                 <input type="hidden" th:if="${estoque.idEstoque != null}" th:field="*{produto.idProduto}">
-
                 <small th:if="${#fields.hasErrors('produto.idProduto')}" th:errors="*{produto.idProduto}" class="erro"></small>
             </div>
 
-            <button type="submit" class="btn-cadastrar">
+            <!-- Botão -->
+            <button type="submit" class="btn-cadastrar" style="
+                padding: 15px 50px;
+                font-size: 1.1rem;
+                border-radius: 30px;
+                background-color: #a67c80;
+                color: #fff;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 0 8px 20px rgba(166,124,128,0.5);
+                transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(166,124,128,0.6)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(166,124,128,0.5)';">
                 <span th:text="${estoque.idEstoque != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
 
+            <!-- Botão excluir -->
             <div th:if="${estoque.idEstoque != null}" style="margin-top: 15px;">
                 <a th:href="@{'/cadastroEstoque/excluir/' + ${estoque.idEstoque}}"
                    onclick="return confirm('Deseja realmente excluir este registro?');"
-                   class="btn-excluir">
+                   class="btn-excluir" style="
+                       display: inline-block;
+                       padding: 10px 30px;
+                       background-color: #ff6b6b;
+                       color: #fff;
+                       border-radius: 25px;
+                       text-decoration: none;
+                       font-weight: 600;
+                       transition: background 0.3s;
+                   " onmouseover="this.style.backgroundColor='#ff4c4c';" onmouseout="this.style.backgroundColor='#ff6b6b';">
                     Excluir
                 </a>
             </div>
 
         </form>
-
     </div>
 </section>
 

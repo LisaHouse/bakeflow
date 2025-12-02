@@ -1,133 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <title>Novo Pedido</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Pedido</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 
-<header class="menu-superior">
-    <nav>
-        <ul>
-            <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li>
-            <p>Relatórios</p>
-            <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
-            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
-            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
-        </ul>
-    </nav>
+<!-- MENU SUPERIOR -->
+<header class="navbar">
+    <ul>
+        <li><a href="/Index" class="dropbtn">Início</a></li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastros</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatórios</a>
+            <ul class="dropdown-content">
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+            </ul>
+        </li>
+    </ul>
 </header>
 
-<section class="container">
+<!-- CONTAINER CENTRAL -->
+<section class="hero">
+    <div class="hero-texto" style="text-align: center; margin-bottom: 40px;">
+        <h1 class="titulo" style="font-size: 3rem; color: #4a2c2a;">Cadastro de Pedido</h1>
+        <h2 class="subtitulo" style="font-size: 1.5rem; color: #a67c80; font-weight: 500;">
+            Preencha os dados para cadastrar ou atualizar o pedido
+        </h2>
+    </div>
 
-    <h1 class="titulo">Cadastro de Pedido</h1>
+    <!-- BOX CENTRAL -->
+    <div class="cadastro-container" style="
+        background-color: #fff;
+        width: 100%;
+        max-width: 800px;
+        padding: 40px 30px;
+        border-radius: 25px;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    ">
 
-    <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post">
+        <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            <input type="hidden" th:field="*{idPedido}"/>
 
-        <input type="hidden" th:field="*{idPedido}"/>
+            <!-- Cliente -->
+            <div class="grupo">
+                <label>Cliente: <span class="obrigatorio">*</span></label>
+                <select th:field="*{cliente.idCliente}" required>
+                    <option value="">Selecione...</option>
+                    <option th:each="c : ${clientes}" th:value="${c.idCliente}" th:text="${c.nome}"></option>
+                </select>
+            </div>
 
-        <div class="grupo">
-            <label>Cliente:</label>
-            <select th:field="*{cliente.idCliente}" required>
-                <option value="">Selecione...</option>
-                <option th:each="c : ${clientes}"
-                        th:value="${c.idCliente}"
-                        th:text="${c.nome}">
-                </option>
-            </select>
+            <!-- Status -->
+            <div class="grupo">
+                <label>Status:</label>
+                <input type="text" th:field="*{status}" placeholder="Aberto"/>
+            </div>
+
+            <!-- Itens do Pedido -->
+            <h3>Itens do Pedido</h3>
+            <table class="tabela-itens" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Estoque</th>
+                    <th>Qtd</th>
+                    <th>Valor Unit.</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="tabelaItens">
+                <tr th:each="item, iter : *{itens}">
+                    <td>
+                        <select class="produtoSelect"
+                                th:name="'itens[' + ${iter.index} + '].produto.idProduto'"
+                                th:onchange="buscarDadosProduto(this)">
+                            <option value="">Selecione...</option>
+                            <option th:each="p : ${produtos}" th:value="${p.idProduto}" th:text="${p.nome}"
+                                    th:selected="${item.produto != null && item.produto.idProduto == p.idProduto}"></option>
+                        </select>
+                    </td>
+                    <td><span class="estoqueSpan">—</span></td>
+                    <td><input type="number" min="1" class="qtdInput" th:name="'itens[' + ${iter.index} + '].quantidade'" th:value="${item.quantidade}" onchange="atualizarTotal()"></td>
+                    <td><input type="number" step="0.01" readonly class="valorItem" th:name="'itens[' + ${iter.index} + '].valor'" th:value="${item.valor}"></td>
+                    <td><button type="button" onclick="removerItem(this)">X</button></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <button type="button" onclick="adicionarItem()" class="btn-cadastrar" style="width: fit-content;">Adicionar Item</button>
+
+            <h3>Total do Pedido: R$ <span id="totalPedido">0.00</span></h3>
+
+            <button type="submit" class="btn-cadastrar">Salvar Pedido</button>
+        </form>
+
+        <!-- Botão excluir apenas no modo edição -->
+        <div th:if="${pedido.idPedido != null}" style="margin-top: 15px;">
+            <a th:href="@{'/pedidos/excluir/' + ${pedido.idPedido}}"
+               onclick="return confirm('Excluir este pedido? O estoque será devolvido!');"
+               class="btn-excluir">Excluir Pedido</a>
         </div>
 
-        <label>Status:</label>
-        <input type="text" th:field="*{status}" placeholder="Aberto"/>
-
-        <h3>Itens do Pedido</h3>
-
-        <table class="tabela-itens">
-            <thead>
-            <tr>
-                <th>Produto</th>
-                <th>Estoque</th>
-                <th>Qtd</th>
-                <th>Valor Unit.</th>
-                <th></th>
-            </tr>
-            </thead>
-
-            <tbody id="tabelaItens">
-
-            <tr th:each="item, iter : *{itens}">
-                <td>
-                    <select class="produtoSelect"
-                            th:name="'itens[' + ${iter.index} + '].produto.idProduto'"
-                            th:onchange="buscarDadosProduto(this)">
-                        <option value="">Selecione...</option>
-                        <option th:each="p : ${produtos}"
-                                th:value="${p.idProduto}"
-                                th:text="${p.nome}"
-                                th:selected="${item.produto != null && item.produto.idProduto == p.idProduto}">
-                        </option>
-                    </select>
-                </td>
-
-                <td>
-                    <span class="estoqueSpan">—</span>
-                </td>
-
-                <td>
-                    <input type="number" min="1"
-                           class="qtdInput"
-                           th:name="'itens[' + ${iter.index} + '].quantidade'"
-                           th:value="${item.quantidade}"
-                           onchange="atualizarTotal()">
-                </td>
-
-                <td>
-                    <input type="number" step="0.01" readonly
-                           class="valorItem"
-                           th:name="'itens[' + ${iter.index} + '].valor'"
-                           th:value="${item.valor}">
-                </td>
-
-                <td>
-                    <button type="button" onclick="removerItem(this)">X</button>
-                </td>
-            </tr>
-
-            </tbody>
-        </table>
-
-        <br>
-
-        <button type="button" onclick="adicionarItem()">Adicionar Item</button>
-
-        <h3>Total do Pedido: R$ <span id="totalPedido">0.00</span></h3>
-
-        <button type="submit">Salvar Pedido</button>
-
-    </form>
-
+    </div>
 </section>
 
 <script>
-
-    // ==================================================
-    // BUSCA DADOS DO PRODUTO (ESTOQUE + PREÇO)
-    // ==================================================
     function buscarDadosProduto(select) {
-
         const row = select.closest("tr");
         const estoqueSpan = row.querySelector(".estoqueSpan");
         const inputValor = row.querySelector(".valorItem");
@@ -147,102 +146,53 @@
 
         fetch("/api/produto/" + idProd)
             .then(r => r.json())
-            .then(p => {
-                inputValor.value = p.preco;
-                atualizarTotal();
-            })
-            .catch(() => {
-                inputValor.value = "";
-                atualizarTotal();
-            });
+            .then(p => { inputValor.value = p.preco; atualizarTotal(); })
+            .catch(() => { inputValor.value = ""; atualizarTotal(); });
     }
 
-    // ==================================================
-    // ADICIONAR ITEM
-    // ==================================================
     function adicionarItem() {
         const tabela = document.getElementById("tabelaItens");
-
         const html = `
-        <tr>
-            <td>
-                <select class="produtoSelect" name="novo" onchange="buscarDadosProduto(this)">
-                    ${window.produtosOptionsHTML}
-                </select>
-            </td>
-
-            <td><span class="estoqueSpan">—</span></td>
-
-            <td>
-                <input type="number" min="1" class="qtdInput" onchange="atualizarTotal()">
-            </td>
-
-            <td>
-                <input type="number" step="0.01" class="valorItem" readonly>
-            </td>
-
-            <td><button type="button" onclick="removerItem(this)">X</button></td>
-        </tr>
-    `;
-
+            <tr>
+                <td>
+                    <select class="produtoSelect" name="novo" onchange="buscarDadosProduto(this)">
+                        ${window.produtosOptionsHTML}
+                    </select>
+                </td>
+                <td><span class="estoqueSpan">—</span></td>
+                <td><input type="number" min="1" class="qtdInput" onchange="atualizarTotal()"></td>
+                <td><input type="number" step="0.01" class="valorItem" readonly></td>
+                <td><button type="button" onclick="removerItem(this)">X</button></td>
+            </tr>
+        `;
         tabela.insertAdjacentHTML("beforeend", html);
     }
 
-    // ==================================================
-    // REMOVER ITEM
-    // ==================================================
     function removerItem(btn) {
         btn.closest("tr").remove();
         atualizarTotal();
     }
 
-    // ==================================================
-    // CALCULAR TOTAL
-    // ==================================================
     function atualizarTotal() {
         let total = 0;
-
         document.querySelectorAll("#tabelaItens tr").forEach(tr => {
             const qtd = tr.querySelector(".qtdInput");
             const valor = tr.querySelector(".valorItem");
-
             if (qtd && valor && qtd.value && valor.value) {
                 total += (parseFloat(valor.value) * parseInt(qtd.value));
             }
         });
-
         document.getElementById("totalPedido").innerText = total.toFixed(2);
     }
 
-    // ==================================================
-    // NO CARREGAR DA PÁGINA (EDIÇÃO)
-    // ==================================================
     window.addEventListener("load", function() {
-
-        // salvar opções de produto para itens novos
         const firstSelect = document.querySelector(".produtoSelect");
-        if (firstSelect) {
-            window.produtosOptionsHTML = firstSelect.innerHTML;
-        }
+        if (firstSelect) window.produtosOptionsHTML = firstSelect.innerHTML;
 
-        // recarregar estoque e valores ao EDITAR
-        document.querySelectorAll(".produtoSelect").forEach(sel => {
-            if (sel.value) {
-                buscarDadosProduto(sel);
-            }
-        });
-
+        document.querySelectorAll(".produtoSelect").forEach(sel => { if (sel.value) buscarDadosProduto(sel); });
         atualizarTotal();
     });
-
 </script>
-
-<!-- Botão excluir apenas no modo edição -->
-<div th:if="${pedido.idPedido != null}">
-    <a th:href="@{'/pedidos/excluir/' + ${pedido.idPedido}}"
-       onclick="return confirm('Excluir este pedido? O estoque será devolvido!');"
-       class="btn-excluir">Excluir Pedido</a>
-</div>
 
 </body>
 </html>

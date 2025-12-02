@@ -3,45 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produto</title>
-    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+    <title>Cadastro de Produto</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<header class="menu-superior">
-    <nav>
-        <ul>
-            <li><a href="/Index">Início</a></li>
-            <li class="cadastros-dropdown">
-                <p>Cadastros</p>
-                <ul class="submenu">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li>
-            <p>Relatórios</p>
-            <li><a href="/pedidos/relatorio">Pedidos</a></li>
-            <li><a href="/cadastroCliente/relatorio">Cliente</a></li>
-            <li><a href="/cadastroProduto/relatorio">Produto</a></li>
-            <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
-        </ul>
-    </nav>
+<!-- MENU SUPERIOR -->
+<header class="navbar">
+    <ul>
+        <li><a href="/Index" class="dropbtn">Início</a></li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastros</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatórios</a>
+            <ul class="dropdown-content">
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+            </ul>
+        </li>
+    </ul>
 </header>
 
-<section class="container">
+<!-- CONTAINER CENTRAL -->
+<section class="hero">
+    <div class="hero-texto" style="text-align: center; margin-bottom: 40px;">
+        <h1 class="titulo" style="font-size: 3rem; color: #4a2c2a;">Cadastro de Produto</h1>
+        <h2 class="subtitulo" style="font-size: 1.5rem; color: #a67c80; font-weight: 500;">
+            Preencha os dados para cadastrar ou atualizar um produto
+        </h2>
+    </div>
 
-    <h1 class="titulo">PRODUTO</h1>
+    <!-- BOX CENTRAL -->
+    <div class="cadastro-container" style="
+        background-color: #fff;
+        width: 100%;
+        max-width: 500px;
+        padding: 40px 30px;
+        border-radius: 25px;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    ">
 
-    <div class="principal">
-
-        <form th:action="@{/cadastroProduto}" th:object="${produto}" method="post">
-
-            <!-- Campo oculto para permitir edição -->
+        <form th:action="@{/cadastroProduto}" th:object="${produto}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
             <input type="hidden" th:field="*{idProduto}"/>
 
-            <!-- NOME -->
+            <!-- NOME DO PRODUTO -->
             <div class="grupo">
                 <label>Nome Produto: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{nome}" placeholder="Digite o nome do produto" required>
@@ -51,21 +71,40 @@
             <!-- PREÇO -->
             <div class="grupo">
                 <label>Preço: <span class="obrigatorio">*</span></label>
-                <input type="number" th:field="*{preco}" step="0.01" min="0.01"
-                       placeholder="Digite o preço do produto" required>
+                <input type="number" th:field="*{preco}" step="0.01" min="0.01" placeholder="Digite o preço do produto" required>
                 <small th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}" class="erro"></small>
             </div>
 
-            <!-- Botão salvar -->
-            <button type="submit" class="btn-cadastrar">
+            <!-- BOTÃO CADASTRAR / ATUALIZAR -->
+            <button type="submit" class="btn-cadastrar" style="
+                padding: 15px 50px;
+                font-size: 1.1rem;
+                border-radius: 30px;
+                background-color: #a67c80;
+                color: #fff;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 0 8px 20px rgba(166,124,128,0.5);
+                transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(166,124,128,0.6)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(166,124,128,0.5)';">
                 <span th:text="${produto.idProduto != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
 
-            <!-- Excluir somente se estiver editando -->
-            <div th:if="${produto.idProduto != null}">
+            <!-- BOTÃO EXCLUIR -->
+            <div th:if="${produto.idProduto != null}" style="margin-top: 15px;">
                 <a th:href="@{'/cadastroProduto/excluir/' + ${produto.idProduto}}"
                    onclick="return confirm('Tem certeza que deseja excluir este produto?');"
-                   class="btn-excluir">
+                   class="btn-excluir" style="
+                       display: inline-block;
+                       padding: 10px 30px;
+                       background-color: #ff6b6b;
+                       color: #fff;
+                       border-radius: 25px;
+                       text-decoration: none;
+                       font-weight: 600;
+                       transition: background 0.3s;
+                   " onmouseover="this.style.backgroundColor='#ff4c4c';" onmouseout="this.style.backgroundColor='#ff6b6b';">
                     Excluir
                 </a>
             </div>

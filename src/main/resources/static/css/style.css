@@ -1,287 +1,220 @@
-/* ==========================
-   PADRÕES GERAIS DO SISTEMA
-========================== */
+/* =========================================
+   IMPORTAÇÃO DE FONTES
+========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;600;800&display=swap');
 
+:root {
+    --cor-bg-topo: #ffffff;
+    --cor-bg-base: #eacda3;
+    --cor-gradiente: linear-gradient(180deg, #ffffff 0%, #f3dce2 40%, #e6c0d0 100%);
+    --cor-texto-titulo: #4a2c2a;
+    --cor-texto-corpo: #6d5452;
+    --nav-bg: #f0eff1;
+    --btn-bg: #a67c80;
+    --btn-sombra: rgba(166, 124, 128, 0.4);
+}
+
+/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Inter", sans-serif;
 }
 
 body {
-    background: #f5f7fa;
+    font-family: 'Montserrat', sans-serif;
+    background: var(--cor-gradiente);
     min-height: 100vh;
-    color: #333;
-    outline: none;
+    color: var(--cor-texto-titulo);
+    overflow-x: hidden;
 }
 
-/* Remove contornos agressivos */
-*:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Títulos gerais */
-h1, .titulo {
-    text-align: center;
-    font-size: 22px;
-    color: #2d3748;
-    font-weight: 700;
-    margin-bottom: 24px;
-}
-
-/* Containers padrão de formulários */
-.container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* Labels */
-label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    display: block;
-    color: #4a5568;
-    font-size: 14px;
-}
-
-/* Inputs */
-input[type="text"],
-input[type="number"],
-textarea,
-select {
+/* =========================================
+   NAVBAR (MENU SUPERIOR COM DROPDOWN)
+========================================= */
+.navbar {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #d0d7e1;
-    border-radius: 8px;
-    font-size: 14px;
-    background: #f9fafb;
-    margin-bottom: 18px;
-    appearance: none;
-    transition: 0.2s;
-}
-
-select {
-    background-image: url("data:image/svg+xml;utf8,<svg fill='%234a5568' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 14px;
-    padding-right: 35px;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: #3182ce;
-    box-shadow: 0 0 2px rgba(49,130,206,0.35);
-}
-
-/* Botões */
-button,
-.btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
-    background: #3182ce;
-    color: white;
-    transition: 0.2s;
-}
-
-button:hover,
-.btn:hover {
-    background: #276bb0;
-}
-
-/* Botão excluir */
-.btn-excluir {
-    background: #e53e3e;
-    border-radius: 8px;
-}
-
-.btn-excluir:hover {
-    background: #c53030;
-}
-
-/* Erros de validação */
-.erro {
-    color: #e53e3e;
-    font-size: 13px;
-    margin-top: -12px;
-    margin-bottom: 10px;
-}
-
-/* Alertas */
-.alert {
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-
-/* ==========================
-     ESTILO DA HOME PAGE
-========================== */
-
-.menu-superior {
-    background: #ffffff;
-    padding: 18px 0;
+    background-color: var(--nav-bg);
+    padding: 15px 20px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    border-bottom: 4px solid #4AA3FF;
+    border-bottom: 3px solid #e6c0d0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
 }
 
-.menu {
+/* Target only the top-level UL in the navbar so nested ULs (dropdowns) are not affected */
+.navbar > ul {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: 120px;
+    gap: 50px;
+    margin: 0;
+    padding: 0;
 }
 
-.menu a {
-    text-decoration: none;
-    font-weight: 600;
-    color: #444;
-    font-size: 18px;
-    padding: 12px 18px;
-    border-radius: 20px;
-}
-
-/* DROPDOWN */
-.dropdown {
+.navbar li {
     position: relative;
 }
 
 .dropbtn {
-    background: none;
-    border: none;
+    text-decoration: none;
+    color: #333;
     font-weight: 600;
-    font-size: 18px;
-    color: #444;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
-    padding: 12px 22px;
-    border-radius: 22px;
-    display: flex;
-    align-items: center;
-    transition: 0.2s;
+    display: inline-block;
 }
 
-.dropbtn:hover {
-    background: rgba(198,156,172,0.25);
-    color: #5a345a;
+.dropbtn:hover,
+.dropbtn:focus {
+    background-color: #f8c6d8;
+    color: #4a2c2a;
 }
 
-.dropdown-content {
+/* Dropdown */
+.dropdown .dropdown-content {
     display: none;
     position: absolute;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.24);
-    padding: 10px 0;
-    border-radius: 10px;
-    min-width: 190px;
-    top: 110%;
+    top: 100%; /* keep it immediately below the button so there's no gap that causes mouseout */
     left: 0;
-    z-index: 10;
+    background-color: #fff;
+    min-width: 180px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    padding: 0; /* reset default UL padding to remove bullet indent */
+    margin: 0;
+    list-style: none; /* remove bullet/marker */
+    z-index: 1000;
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+.dropdown-content li {
+    padding: 8px 16px;
+    list-style: none; /* extra safety to prevent bullets */
 }
 
-.dropdown-content a {
-    padding: 12px 18px;
+.dropdown-content li a {
+    text-decoration: none;
     color: #333;
-    font-size: 16px;
+    display: block; /* ensures each link occupies a full line */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-content li a:hover {
+    background-color: #f3dce2;
+    color: #4a2c2a;
+}
+
+/* Mostrar dropdown ao passar o mouse - keep it visible while hovering over the button OR the dropdown itself */
+.dropdown:hover .dropdown-content,
+.dropdown .dropdown-content:hover {
     display: block;
 }
 
-.dropdown-content a:hover {
-    background: rgba(200,150,180,0.20);
-}
-
-/* HERO */
-.hero {
+/* =========================================
+   HERO / LAYOUT PRINCIPAL
+========================================= */
+.hero-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 90px 60px;
-    gap: 80px;
-    background: linear-gradient(to right, #ffdceb, #fce4f5, #ffffff);
-    border-bottom: 3px solid #4AA3FF;
-    min-height: 520px;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 5%;
+    min-height: 80vh;
+    gap: 40px;
 }
 
-.hero-texto {
-    max-width: 550px;
+.cadastro-container {
+    background-color: #fff;
+    width: 100%;
+    max-width: 700px;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.hero .titulo {
-    font-size: 40px;
+
+.hero-content {
+    flex: 1;
+    max-width: 500px;
+}
+
+.logo-texto {
+    font-size: 3.5rem;
     font-weight: 800;
-    color: #5a3434;
+    color: var(--cor-texto-titulo);
+    line-height: 1;
+    margin-bottom: 5px;
 }
 
-.subtitulo {
-    font-size: 20px;
-    font-weight: 600;
-    color: #856185;
+.subtitulo-cursive {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    color: var(--btn-bg);
+    margin-bottom: 30px;
 }
 
 .descricao {
-    color: #4b4b4b;
-    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--cor-texto-corpo);
+    margin-bottom: 40px;
+    max-width: 400px;
 }
 
-.chamada {
-    font-size: 18px;
+.chamada-acao {
     font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
 }
 
-/* Botão da Home */
 .btn-cadastrar {
-    background: #c69cac;
-    padding: 12px 30px;
-    border-radius: 24px;
+    background-color: var(--btn-bg);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 18px;
-    width: auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.20);
+    text-transform: uppercase;
+    border: none;
+    padding: 15px 60px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 10px 20px var(--btn-sombra);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-cadastrar:hover {
-    background: #b2879a;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(166, 124, 128, 0.6);
+    background-color: #8f6266;
 }
 
-.hero-imagem img {
-    width: 420px;
-    border-radius: 18px;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    position: relative;
 }
 
-/* Rodapé */
-.rodape {
-    background: #5a3434;
-    padding: 50px;
-    color: white;
-    text-align: center;
+.hero-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 30px;
+    border: 4px solid #fff;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-.rodape h3 {
-    font-size: 22px;
-}
 
-.rodape p {
-    font-size: 14px;
-}
 
-.social {
-    margin-top: 16px;
-    font-size: 24px;
-}
+

@@ -1,184 +1,106 @@
-<!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Cliente</title>
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-            crossorigin="anonymous"></script>
-
-    <script>
-        $(document).ready(function () {
-
-            function limpaCep() {
-                $("#logradouro").val("");
-                $("#bairro").val("");
-                $("#cidade").val("");
-                $("#uf").val("");
-            }
-
-            $("#cep").blur(function () {
-                var cep = $(this).val().replace(/\D/g, '');
-
-                if (cep !== "") {
-                    var validacep = /^[0-9]{8}$/;
-
-                    if (validacep.test(cep)) {
-
-                        $("#logradouro").val("...");
-                        $("#bairro").val("...");
-                        $("#cidade").val("...");
-                        $("#uf").val("...");
-
-                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
-
-                            if (!("erro" in dados)) {
-                                $("#logradouro").val(dados.logradouro);
-                                $("#bairro").val(dados.bairro);
-                                $("#cidade").val(dados.localidade);
-                                $("#uf").val(dados.uf);
-                            } else {
-                                limpaCep();
-                                alert("CEP não encontrado.");
-                            }
-                        });
-                    } else {
-                        limpaCep();
-                        alert("Formato de CEP inválido.");
-                    }
-                } else {
-                    limpaCep();
-                }
-            });
-        });
-    </script>
-</head>
-
-<body>
-
-<!-- MENU SUPERIOR (MESMO DA HOME) -->
-<header class="menu-superior">
-    <nav>
-        <ul class="menu">
-
-            <li><a href="/Index">Início</a></li>
-
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Cadastros</a>
-
-                <ul class="dropdown-content">
-                    <li><a href="/cadastroCliente">Cliente</a></li>
-                    <li><a href="/cadastroProduto">Produto</a></li>
-                    <li><a href="/cadastroEstoque">Estoque</a></li>
-                    <li><a href="/pedidos/novo">Pedido</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Relatórios</a>
-
-                <ul class="dropdown-content">
-                    <li><a href="/pedidos/relatorio">Pedidos</a></li>
-                    <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
-                    <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
-                    <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
-                </ul>
-            </li>
-
-        </ul>
-    </nav>
-</header>
-
-<!-- CONTAINER CENTRAL PADRONIZADO -->
-<section class="hero" style="flex-direction: column; padding: 60px 40px; gap: 30px;">
-
-    <div class="hero-texto" style="text-align: center;">
-        <h1 class="titulo">Cadastro de Cliente</h1>
-        <h2 class="subtitulo">Preencha os dados para cadastrar um novo cliente</h2>
+<section class="hero">
+    <div class="hero-texto" style="text-align: center; margin-bottom: 40px;">
+        <h1 class="titulo" style="font-size: 3rem; color: #4a2c2a;">Cadastro de Cliente</h1>
+        <h2 class="subtitulo" style="font-size: 1.5rem; color: #a67c80; font-weight: 500;">
+            Preencha os dados para cadastrar um novo cliente
+        </h2>
     </div>
 
-    <!-- CAIXA BRANCA COM SOMBRA (PADRÃO HOME) -->
-    <div style="
-        background: white;
+    <!-- BOX CENTRAL -->
+    <div class="cadastro-container" style="
+        background-color: #fff;
         width: 100%;
-        max-width: 650px;
-        padding: 40px;
-        border-radius: 18px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.20);
+        max-width: 700px;
+        padding: 40px 30px;
+        border-radius: 25px;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
     ">
 
+
         <!-- ALERTAS -->
-        <div th:if="${mensagem}" class="alert alert-success" style="margin-bottom: 20px;">
+        <div th:if="${mensagem}" class="alert alert-success">
             <p th:text="${mensagem}"></p>
         </div>
-
-        <div th:if="${erro}" class="alert alert-danger" style="margin-bottom: 20px;">
+        <div th:if="${erro}" class="alert alert-danger">
             <p th:text="${erro}"></p>
         </div>
 
         <!-- FORMULÁRIO -->
-        <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post">
+        <form th:action="@{/cadastroCliente}" th:object="${cliente}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
 
             <input type="hidden" th:field="*{idCliente}">
             <input type="hidden" th:field="*{endereco.id}">
 
+            <!-- Nome e Telefone -->
             <div class="grupo">
                 <label>Nome Completo: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{nome}" placeholder="Digite o nome do cliente">
-                <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="erro"></small>
             </div>
 
             <div class="grupo">
                 <label>Telefone: <span class="obrigatorio">*</span></label>
                 <input type="text" th:field="*{telefone}" placeholder="Digite o telefone">
-                <small th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="erro"></small>
             </div>
 
-            <h3 style="margin-top: 30px; color:#5a345a;">Endereço</h3>
+            <!-- Endereço -->
+            <h3 style="color: #5a345a; margin-bottom: 15px;">Endereço</h3>
 
-            <div class="grupo">
-                <label>CEP: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{endereco.cep}" id="cep" placeholder="Digite o CEP">
+            <!-- Linha 1: CEP + Número -->
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1;">
+                    <label>CEP: <span class="obrigatorio">*</span></label>
+                    <input type="text" th:field="*{endereco.cep}" id="cep" placeholder="Digite o CEP">
+                </div>
+                <div style="flex: 1;">
+                    <label>Número: <span class="obrigatorio">*</span></label>
+                    <input type="text" th:field="*{endereco.numero}" placeholder="Nº da residência">
+                </div>
             </div>
 
-            <div class="grupo">
-                <label>Número: <span class="obrigatorio">*</span></label>
-                <input type="text" th:field="*{endereco.numero}" placeholder="Nº da residência">
+            <!-- Linha 2: Logradouro + Bairro -->
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 2;">
+                    <label>Logradouro:</label>
+                    <input type="text" th:field="*{endereco.logradouro}" id="logradouro" readonly>
+                </div>
+                <div style="flex: 1;">
+                    <label>Bairro:</label>
+                    <input type="text" th:field="*{endereco.bairro}" id="bairro" readonly>
+                </div>
             </div>
 
-            <div class="grupo">
-                <label>Logradouro:</label>
-                <input type="text" th:field="*{endereco.logradouro}" id="logradouro" readonly>
+            <!-- Linha 3: Cidade + Estado -->
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 2;">
+                    <label>Cidade:</label>
+                    <input type="text" th:field="*{endereco.cidade}" id="cidade" readonly>
+                </div>
+                <div style="flex: 1;">
+                    <label>Estado:</label>
+                    <input type="text" th:field="*{endereco.estado}" id="uf" readonly>
+                </div>
             </div>
 
-            <div class="grupo">
-                <label>Bairro:</label>
-                <input type="text" th:field="*{endereco.bairro}" id="bairro" readonly>
-            </div>
-
-            <div class="grupo">
-                <label>Cidade:</label>
-                <input type="text" th:field="*{endereco.cidade}" id="cidade" readonly>
-            </div>
-
-            <div class="grupo">
-                <label>Estado:</label>
-                <input type="text" th:field="*{endereco.estado}" id="uf" readonly>
-            </div>
-
-            <button type="submit" class="btn-cadastrar" style="margin-top: 20px;">
+            <!-- Botão -->
+            <button type="submit" class="btn-cadastrar" style="
+                margin-top: 20px;
+                padding: 15px 50px;
+                font-size: 1.1rem;
+                border-radius: 30px;
+                background-color: #a67c80;
+                color: #fff;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 0 8px 20px rgba(166,124,128,0.5);
+                transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(166,124,128,0.6)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(166,124,128,0.5)';">
                 <span th:text="${cliente.idCliente != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
-
         </form>
-
     </div>
 </section>
-
-</body>
-</html>
