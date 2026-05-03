@@ -152,12 +152,16 @@
         <tbody>
         <tr th:each="p : ${pedidos}">
             <td th:text="${p.idPedido}"></td>
-            <td th:text="${p.cliente.nome}"></td>
+            <td>
+                <span th:if="${p.cliente != null}" th:text="${p.cliente.nome}"></span>
+                <span th:if="${p.cliente == null}">Cliente não definido</span>
+            </td>
             <td th:text="${p.valorTotal}"></td>
             <td>
                 <ul>
                     <li th:each="i : ${p.itens}">
-                        <span th:text="${i.produto.nome}"></span>
+                        <span th:if="${i.produto != null}" th:text="${i.produto.nome}"></span>
+                        <span th:if="${i.produto == null}">Produto não definido</span>
                         (<span th:text="${i.quantidade}"></span>)
                     </li>
                 </ul>
