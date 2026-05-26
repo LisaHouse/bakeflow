@@ -365,3 +365,404 @@ section.hero-container .hero-content > .btn-cadastrar {
     margin: 0;
     font-size: 0.98rem;
 }
+
+/* =========================================
+   UI REFRESH - BAKEFLOW
+========================================= */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(243,220,226,0.92) 48%, rgba(230,192,208,0.92) 100%),
+        radial-gradient(circle at top left, rgba(166,124,128,0.12), transparent 30%) !important;
+}
+
+.navbar {
+    background-color: rgba(255,255,255,0.86) !important;
+    border-bottom: 1px solid rgba(166,124,128,0.22) !important;
+    box-shadow: 0 10px 28px rgba(74,44,42,0.08) !important;
+    backdrop-filter: blur(12px);
+    padding: 12px 24px !important;
+}
+
+.navbar > ul {
+    align-items: center;
+    background-color: rgba(240,239,241,0.72);
+    border: 1px solid rgba(166,124,128,0.16);
+    border-radius: 999px;
+    gap: 10px !important;
+    padding: 6px !important;
+}
+
+.dropbtn {
+    border-radius: 999px !important;
+    color: var(--cor-texto-titulo) !important;
+    font-size: 0.95rem !important;
+    padding: 10px 18px !important;
+}
+
+.dropbtn:hover,
+.dropbtn:focus {
+    background-color: #f3dce2 !important;
+    box-shadow: inset 0 0 0 1px rgba(166,124,128,0.14);
+}
+
+.dropdown .dropdown-content {
+    border: 1px solid rgba(166,124,128,0.16) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 18px 40px rgba(74,44,42,0.14) !important;
+    min-width: 210px !important;
+    overflow: hidden;
+    padding: 8px !important;
+}
+
+.dropdown-content li {
+    padding: 0 !important;
+}
+
+.dropdown-content li a {
+    border-radius: 10px;
+    color: var(--cor-texto-titulo) !important;
+    font-weight: 600;
+    padding: 10px 12px;
+}
+
+.dropdown-content li a:hover {
+    background-color: #f8e7ec !important;
+}
+
+.hero,
+.hero-container {
+    max-width: 1120px;
+    margin: 0 auto !important;
+    padding: 48px 20px 70px !important;
+}
+
+.hero-texto {
+    margin: 0 auto 28px !important;
+    max-width: 760px;
+}
+
+.titulo,
+.logo-texto {
+    color: var(--cor-texto-titulo) !important;
+    letter-spacing: 0 !important;
+}
+
+.hero-texto .titulo,
+.titulo {
+    font-size: 2.35rem !important;
+    line-height: 1.12 !important;
+    margin-bottom: 10px !important;
+}
+
+.subtitulo,
+.hero-texto .subtitulo {
+    color: var(--cor-texto-corpo) !important;
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    line-height: 1.55 !important;
+}
+
+.hero-container {
+    min-height: calc(100vh - 92px) !important;
+}
+
+.hero-content {
+    background-color: rgba(255,255,255,0.72);
+    border: 1px solid rgba(166,124,128,0.18);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(74,44,42,0.11);
+    max-width: 680px !important;
+    padding: 52px 44px;
+}
+
+.logo-texto {
+    font-size: 4rem !important;
+}
+
+.subtitulo-cursive {
+    color: var(--btn-bg) !important;
+    font-size: 2.3rem !important;
+    margin-bottom: 12px !important;
+}
+
+.hero-content .descricao {
+    color: var(--cor-texto-corpo) !important;
+    font-size: 1.05rem !important;
+    max-width: 520px !important;
+}
+
+.cadastro-container,
+.container {
+    background: rgba(255,255,255,0.94) !important;
+    border: 1px solid rgba(166,124,128,0.16);
+    border-radius: 18px !important;
+    box-shadow: 0 22px 54px rgba(74,44,42,0.12) !important;
+}
+
+.cadastro-container {
+    max-width: 760px !important;
+    padding: 32px !important;
+    gap: 22px !important;
+}
+
+.cadastro-container form {
+    gap: 18px !important;
+}
+
+.cadastro-container h3,
+.subtitulo-secao {
+    color: var(--cor-texto-titulo) !important;
+    font-size: 1.15rem !important;
+    margin: 8px 0 2px !important;
+}
+
+.cadastro-container label {
+    color: var(--cor-texto-titulo) !important;
+    font-size: 0.9rem !important;
+    letter-spacing: 0 !important;
+}
+
+.cadastro-container input[type="text"],
+.cadastro-container input[type="number"],
+.cadastro-container textarea,
+.cadastro-container select,
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    background-color: #fff !important;
+    border: 1px solid #ead8dc !important;
+    border-radius: 12px !important;
+    color: #3f302f !important;
+    font-family: 'Montserrat', sans-serif !important;
+    min-height: 46px;
+    outline: none;
+    padding: 12px 14px !important;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.cadastro-container input:focus,
+.cadastro-container select:focus,
+.cadastro-container textarea:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--btn-bg) !important;
+    box-shadow: 0 0 0 4px rgba(166,124,128,0.14) !important;
+}
+
+.cadastro-container input[readonly] {
+    background-color: #faf5f6 !important;
+}
+
+.form-row {
+    gap: 16px !important;
+}
+
+.btn-cadastrar,
+button.btn-cadastrar {
+    align-items: center;
+    border-radius: 14px !important;
+    box-shadow: 0 12px 26px rgba(166,124,128,0.28) !important;
+    display: inline-flex !important;
+    justify-content: center;
+    min-height: 48px;
+    padding: 13px 28px !important;
+    text-decoration: none !important;
+    text-transform: none !important;
+}
+
+.btn-cadastrar:hover,
+button.btn-cadastrar:hover {
+    background-color: #8f6266 !important;
+    box-shadow: 0 16px 30px rgba(166,124,128,0.36) !important;
+}
+
+.btn-excluir {
+    border-radius: 14px !important;
+    box-shadow: 0 10px 22px rgba(255,107,107,0.22);
+    min-height: 44px;
+    padding: 12px 24px !important;
+}
+
+.alert,
+.mensagem-sucesso,
+.mensagem-erro,
+.vazio {
+    border-radius: 14px !important;
+    line-height: 1.45;
+    padding: 14px 16px !important;
+}
+
+.alert-success,
+.mensagem-sucesso {
+    background-color: #e8f5ea !important;
+    color: #1f6b35 !important;
+}
+
+.alert-danger,
+.mensagem-erro {
+    background-color: #fdeaea !important;
+    color: #8f2929 !important;
+}
+
+table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    overflow: hidden;
+}
+
+th {
+    background-color: #a67c80 !important;
+    color: #fff !important;
+    font-size: 0.9rem;
+    letter-spacing: 0 !important;
+    padding: 14px 16px !important;
+}
+
+td {
+    border-bottom: 1px solid #f0e4e7;
+    color: #4a2c2a;
+    padding: 14px 16px !important;
+}
+
+tr:nth-child(even) {
+    background-color: #fff8fa !important;
+}
+
+tr:hover {
+    background-color: #f8e7ec !important;
+}
+
+.tabela-itens {
+    border: 1px solid #ead8dc;
+    border-radius: 14px;
+}
+
+.tabela-itens button {
+    background-color: #ff6b6b;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 800;
+    min-height: 36px;
+    min-width: 40px;
+}
+
+.rodape {
+    color: var(--cor-texto-corpo);
+    padding: 28px 20px 42px;
+    text-align: center;
+}
+
+.rodape h3 {
+    color: var(--cor-texto-titulo);
+    margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+    .navbar {
+        padding: 10px 12px !important;
+    }
+
+    .navbar > ul {
+        border-radius: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .dropbtn {
+        font-size: 0.9rem !important;
+        padding: 9px 13px !important;
+    }
+
+    .hero,
+    .hero-container {
+        padding: 34px 16px 48px !important;
+    }
+
+    .hero-texto .titulo,
+    .titulo {
+        font-size: 2rem !important;
+    }
+
+    .cadastro-container,
+    .container {
+        padding: 24px !important;
+    }
+
+    .logo-texto {
+        font-size: 3.1rem !important;
+    }
+
+    .hero-content {
+        padding: 38px 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar > ul {
+        align-items: stretch;
+        border-radius: 14px;
+        gap: 6px !important;
+    }
+
+    .navbar li {
+        text-align: center;
+    }
+
+    .dropbtn {
+        width: 100%;
+    }
+
+    .dropdown .dropdown-content {
+        left: 50% !important;
+        min-width: 190px !important;
+        transform: translateX(-50%);
+    }
+
+    .hero-texto .titulo,
+    .titulo {
+        font-size: 1.65rem !important;
+    }
+
+    .subtitulo,
+    .hero-texto .subtitulo {
+        font-size: 0.95rem !important;
+    }
+
+    .cadastro-container,
+    .container {
+        border-radius: 16px !important;
+        padding: 20px 16px !important;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .btn-cadastrar,
+    button.btn-cadastrar,
+    .btn-excluir {
+        width: 100%;
+    }
+
+    .logo-texto {
+        font-size: 2.55rem !important;
+    }
+
+    .subtitulo-cursive {
+        font-size: 1.8rem !important;
+    }
+
+    .hero-content {
+        border-radius: 18px;
+        padding: 30px 20px;
+    }
+}
