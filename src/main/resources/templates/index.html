@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BakeFlow - Gestão para Confeitaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- MENU SUPERIOR -->
+<nav class="navbar">
+    <ul>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastro</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/cadastroFornecedor">Fornecedor</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatório</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                <li><a href="/cadastroFornecedor/relatorio">Fornecedores</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<!-- SEÇÃO PRINCIPAL -->
+<section class="hero-container">
+    <div class="hero-content">
+        <h1 class="logo-texto">BakeFlow</h1>
+        <h2 class="subtitulo-cursive">Gestão para confeitaria</h2>
+        <p class="descricao">
+            BakeFlow é sua solução para organizar pedidos,<br>
+            controlar estoque e gerenciar sua produção<br>
+            de forma simples e eficiente.
+        </p>
+        <p class="chamada-acao">Cadastre seu pedido clicando aqui:</p>
+        <a href="/pedidos/novo" class="btn-cadastrar" style="margin-top:24px; display:inline-block;">CADASTRAR</a>
+    </div>
+
+
+</section>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+    <h3>BakeFlow</h3>
+    <p>Um sistema de gestão para microempreendedor do ramo alimentício</p>
+</footer>
+
+</body>
+</html>

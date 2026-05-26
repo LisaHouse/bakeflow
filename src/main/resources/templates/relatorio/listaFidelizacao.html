@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatorio de Fidelizacao</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 25px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .titulo {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #4a2c2a;
+            margin-bottom: 30px;
+        }
+
+        .btn-cadastrar {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 30px;
+            background-color: #a67c80;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-cadastrar:hover {
+            background-color: #925d65;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #a67c80;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        tr:hover {
+            background-color: #f1e6e6;
+        }
+
+        .vazio {
+            padding: 18px;
+            background-color: #f8f8f8;
+            border-radius: 12px;
+            color: #4a2c2a;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div th:insert="fragments/flash :: flash"></div>
+
+<header class="navbar">
+    <ul>
+        <li><a href="/Index" class="dropbtn">Inicio</a></li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Cadastros</a>
+            <ul class="dropdown-content">
+                <li><a href="/cadastroCliente">Cliente</a></li>
+                <li><a href="/cadastroProduto">Produto</a></li>
+                <li><a href="/cadastroEstoque">Estoque</a></li>
+                <li><a href="/pedidos/novo">Pedido</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Relatorios</a>
+            <ul class="dropdown-content">
+                <li><a href="/pedidos/relatorio">Pedidos</a></li>
+                <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
+                <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
+                <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                <li><a href="/fidelizacao/relatorio">Fidelização</a></li>
+            </ul>
+        </li>
+    </ul>
+</header>
+
+<section class="container">
+    <h1 class="titulo">Fidelização de Clientes</h1>
+
+    <a href="/pedidos/novo" class="btn-cadastrar">Novo Pedido</a>
+
+    <div th:if="${#lists.isEmpty(fidelizacoes)}" class="vazio">
+        Nenhum ponto de fidelizacao registrado ainda. Finalize um pedido para gerar pontos.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(fidelizacoes)}">
+        <thead>
+        <tr>
+            <th>ID Cliente</th>
+            <th>Cliente</th>
+            <th>Pontos atuais</th>
+            <th>Beneficios gerados</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${fidelizacoes}">
+            <td th:text="${f.clienteId}"></td>
+            <td th:text="${f.clienteNome}"></td>
+            <td th:text="${f.pontos}"></td>
+            <td th:text="${f.beneficiosGerados}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+</body>
+</html>

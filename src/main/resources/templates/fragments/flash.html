@@ -1,0 +1,25 @@
+<!-- Flash fragment: shows a small popup for success/error messages -->
+<div th:fragment="flash">
+    <div id="flash-modal" class="flash-modal" th:data-show="${mensagemSucesso != null or mensagem != null or mensagemErro != null}">
+        <div class="flash-content" th:classappend="${mensagemErro != null} ? ' error' : ' success'">
+            <button class="flash-close" aria-label="Fechar" onclick="document.getElementById('flash-modal').classList.remove('show')">&times;</button>
+            <p class="flash-text" th:text="${mensagemSucesso != null ? mensagemSucesso : (mensagem != null ? mensagem : (mensagemErro != null ? mensagemErro : ''))}"></p>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        (function(){
+            var modal = document.getElementById('flash-modal');
+            if(!modal) return;
+            var shouldShow = modal.getAttribute('data-show') === 'true';
+            if(shouldShow){
+                // add styles and show
+                modal.classList.add('show');
+                // auto hide after 3.5s
+                setTimeout(function(){ modal.classList.remove('show'); }, 3500);
+            }
+        })();
+        /*]]>*/
+    </script>
+</div>
