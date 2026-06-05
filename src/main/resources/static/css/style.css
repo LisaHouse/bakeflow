@@ -665,6 +665,171 @@ tr:hover {
     margin-bottom: 8px;
 }
 
+.ranking-section {
+    max-width: 1120px;
+    margin: 0 auto 64px;
+    padding: 0 20px;
+}
+
+.ranking-header {
+    margin: 0 auto 28px;
+    max-width: 760px;
+    text-align: center;
+}
+
+.ranking-eyebrow {
+    color: var(--btn-bg);
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.ranking-header h2 {
+    color: var(--cor-texto-titulo);
+    font-size: 2rem;
+    line-height: 1.15;
+    margin-bottom: 10px;
+}
+
+.ranking-header p {
+    color: var(--cor-texto-corpo);
+    line-height: 1.6;
+}
+
+.ranking-empty {
+    background-color: rgba(255,255,255,0.9);
+    border: 1px solid rgba(166,124,128,0.16);
+    border-radius: 18px;
+    box-shadow: 0 16px 38px rgba(74,44,42,0.08);
+    color: var(--cor-texto-corpo);
+    margin: 0 auto;
+    max-width: 720px;
+    padding: 22px;
+    text-align: center;
+}
+
+.podium {
+    align-items: end;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.podium-card {
+    background-color: rgba(255,255,255,0.94);
+    border: 1px solid rgba(166,124,128,0.16);
+    border-radius: 18px;
+    box-shadow: 0 22px 54px rgba(74,44,42,0.12);
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    overflow: hidden;
+    position: relative;
+}
+
+.podium-gold {
+    min-height: 340px;
+    order: 2;
+}
+
+.podium-silver {
+    min-height: 300px;
+    order: 1;
+}
+
+.podium-bronze {
+    min-height: 270px;
+    order: 3;
+}
+
+.medal {
+    align-items: center;
+    border-radius: 999px;
+    color: #4a2c2a;
+    display: flex;
+    font-size: 1.4rem;
+    font-weight: 800;
+    height: 58px;
+    justify-content: center;
+    margin: 22px auto 12px;
+    width: 58px;
+}
+
+.podium-gold .medal {
+    background: linear-gradient(135deg, #ffe08a, #d6a529);
+    box-shadow: 0 12px 28px rgba(214,165,41,0.28);
+}
+
+.podium-silver .medal {
+    background: linear-gradient(135deg, #f4f4f4, #bfc5ca);
+    box-shadow: 0 12px 28px rgba(141,148,154,0.22);
+}
+
+.podium-bronze .medal {
+    background: linear-gradient(135deg, #e7b489, #a8693c);
+    box-shadow: 0 12px 28px rgba(168,105,60,0.22);
+}
+
+.podium-product {
+    flex: 1;
+    padding: 0 22px 22px;
+    text-align: center;
+}
+
+.podium-label {
+    color: var(--btn-bg);
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.podium-product h3 {
+    color: var(--cor-texto-titulo);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+}
+
+.podium-product p {
+    color: var(--cor-texto-corpo);
+    line-height: 1.45;
+    margin-bottom: 8px;
+}
+
+.podium-product strong {
+    color: var(--cor-texto-titulo);
+}
+
+.podium-base {
+    align-items: center;
+    color: #fff;
+    display: flex;
+    font-size: 1.55rem;
+    font-weight: 800;
+    justify-content: center;
+    min-height: 82px;
+}
+
+.podium-gold .podium-base {
+    background: linear-gradient(180deg, #d6a529, #b98718);
+    min-height: 120px;
+}
+
+.podium-silver .podium-base {
+    background: linear-gradient(180deg, #bfc5ca, #8e989f);
+    min-height: 96px;
+}
+
+.podium-bronze .podium-base {
+    background: linear-gradient(180deg, #b9784d, #905830);
+    min-height: 76px;
+}
+
 @media (max-width: 900px) {
     .navbar {
         padding: 10px 12px !important;
@@ -703,6 +868,26 @@ tr:hover {
 
     .hero-content {
         padding: 38px 28px;
+    }
+
+    .podium {
+        align-items: stretch;
+        grid-template-columns: 1fr;
+    }
+
+    .podium-card,
+    .podium-gold,
+    .podium-silver,
+    .podium-bronze {
+        min-height: 0;
+        order: initial;
+    }
+
+    .podium-base,
+    .podium-gold .podium-base,
+    .podium-silver .podium-base,
+    .podium-bronze .podium-base {
+        min-height: 64px;
     }
 }
 
@@ -764,5 +949,14 @@ tr:hover {
     .hero-content {
         border-radius: 18px;
         padding: 30px 20px;
+    }
+
+    .ranking-section {
+        margin-bottom: 42px;
+        padding: 0 16px;
+    }
+
+    .ranking-header h2 {
+        font-size: 1.55rem;
     }
 }

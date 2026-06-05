@@ -32,6 +32,7 @@
                 <li><a href="/cadastroCliente/relatorio">Clientes</a></li>
                 <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
                 <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
+                <li><a href="http://localhost:8082/notificacoes/relatorio">Notificações</a></li>
             </ul>
         </li>
     </ul>
@@ -88,8 +89,7 @@
                 cursor: pointer;
                 box-shadow: 0 8px 20px rgba(166,124,128,0.5);
                 transition: all 0.2s;
-            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(166,124,128,0.6)';"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(166,124,128,0.5)';">
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(166,124,128,0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(166,124,128,0.5)';">
                 <span th:text="${produto.idProduto != null ? 'ATUALIZAR' : 'CADASTRAR'}"></span>
             </button>
 
@@ -98,15 +98,15 @@
                 <a th:href="@{'/cadastroProduto/excluir/' + ${produto.idProduto}}"
                    onclick="return confirm('Tem certeza que deseja excluir este produto?');"
                    class="btn-excluir" style="
-                       display: inline-block;
-                       padding: 10px 30px;
-                       background-color: #ff6b6b;
-                       color: #fff;
-                       border-radius: 25px;
-                       text-decoration: none;
-                       font-weight: 600;
-                       transition: background 0.3s;
-                   " onmouseover="this.style.backgroundColor='#ff4c4c';" onmouseout="this.style.backgroundColor='#ff6b6b';">
+                        display: inline-block;
+                        padding: 10px 30px;
+                        background-color: #ff6b6b;
+                        color: #fff;
+                        border-radius: 25px;
+                        text-decoration: none;
+                        font-weight: 600;
+                        transition: background 0.3s;
+                    " onmouseover="this.style.backgroundColor='#ff4c4c';" onmouseout="this.style.backgroundColor='#ff6b6b';">
                     Excluir
                 </a>
             </div>

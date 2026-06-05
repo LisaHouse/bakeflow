@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- MENU SUPERIOR -->
 <nav class="navbar">
     <ul>
         <li class="dropdown">
@@ -29,12 +28,12 @@
                 <li><a href="/cadastroProduto/relatorio">Produtos</a></li>
                 <li><a href="/cadastroEstoque/relatorio">Estoque</a></li>
                 <li><a href="http://localhost:8081/fidelizacao/relatorio">Fidelização</a></li>
+                <li><a href="http://localhost:8082/notificacoes/relatorio">Notificações</a></li>
             </ul>
         </li>
     </ul>
 </nav>
 
-<!-- SEÇÃO PRINCIPAL -->
 <section class="hero-container">
     <div class="hero-content">
         <h1 class="logo-texto">BakeFlow</h1>
@@ -45,13 +44,57 @@
             de forma simples e eficiente.
         </p>
         <p class="chamada-acao">Cadastre seu pedido clicando aqui:</p>
-        <a href="/pedidos/novo" class="btn-cadastrar" style="margin-top:24px; display:inline-block;">CADASTRAR</a>
+        <a href="/pedidos/novo" class="btn-cadastrar">Cadastrar</a>
     </div>
-
-
 </section>
 
-<!-- RODAPÉ -->
+<section class="ranking-section">
+    <div class="ranking-header">
+        <span class="ranking-eyebrow">Mais vendidos</span>
+        <h2>Top 3 produtos da confeitaria</h2>
+        <p>Ranking calculado pelos itens registrados nos pedidos, com quantidade vendida e valor agregado.</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(topProdutos)}" class="ranking-empty">
+        Ainda não há pedidos suficientes para montar o ranking. Finalize pedidos para visualizar os produtos campeões.
+    </div>
+
+    <div class="podium" th:if="${!#lists.isEmpty(topProdutos)}">
+        <article class="podium-card podium-silver" th:if="${topProdutos.size() > 1}" th:with="produto=${topProdutos[1]}">
+            <div class="medal">2</div>
+            <div class="podium-product">
+                <span class="podium-label">Prata</span>
+                <h3 th:text="${produto.nomeProduto}">Produto</h3>
+                <p><strong th:text="${produto.quantidadeVendida}">0</strong> vendidos</p>
+                <p>Valor agregado: R$ <strong th:text="${#numbers.formatDecimal(produto.valorAgregado, 1, 'POINT', 2, 'COMMA')}">0,00</strong></p>
+            </div>
+            <div class="podium-base">2º</div>
+        </article>
+
+        <article class="podium-card podium-gold" th:with="produto=${topProdutos[0]}">
+            <div class="medal">1</div>
+            <div class="podium-product">
+                <span class="podium-label">Ouro</span>
+                <h3 th:text="${produto.nomeProduto}">Produto</h3>
+                <p><strong th:text="${produto.quantidadeVendida}">0</strong> vendidos</p>
+                <p>Valor agregado: R$ <strong th:text="${#numbers.formatDecimal(produto.valorAgregado, 1, 'POINT', 2, 'COMMA')}">0,00</strong></p>
+            </div>
+            <div class="podium-base">1º</div>
+        </article>
+
+        <article class="podium-card podium-bronze" th:if="${topProdutos.size() > 2}" th:with="produto=${topProdutos[2]}">
+            <div class="medal">3</div>
+            <div class="podium-product">
+                <span class="podium-label">Bronze</span>
+                <h3 th:text="${produto.nomeProduto}">Produto</h3>
+                <p><strong th:text="${produto.quantidadeVendida}">0</strong> vendidos</p>
+                <p>Valor agregado: R$ <strong th:text="${#numbers.formatDecimal(produto.valorAgregado, 1, 'POINT', 2, 'COMMA')}">0,00</strong></p>
+            </div>
+            <div class="podium-base">3º</div>
+        </article>
+    </div>
+</section>
+
 <footer class="rodape">
     <h3>BakeFlow</h3>
     <p>Um sistema de gestão para microempreendedor do ramo alimentício</p>
